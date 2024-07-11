@@ -50,7 +50,7 @@ fn main() -> GameResult {
         title: "Space Invaders".to_string(),
         samples: conf::NumSamples::One,
         vsync: true,
-        icon: "/space-invaders-logo.jpg".to_string(),
+        icon: "/space-invaders-logo.png".to_string(),
         srgb: true,
     };
 
