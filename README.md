@@ -8,4 +8,7 @@ cool stuff with it to build a game outside of the context of neovim.
 
 Temporarily on pause
 
+This is one of my new years resolutions to build a game.  I will get this done 
+asap
+
 
