@@ -1,17 +1,25 @@
 function love.load()
-    fruits = { "apple", "banana" }
-    table.insert(fruits, "orange")
+    listOfRectangles = {}
+end
+
+function createRect()
+    table.insert(listOfRectangles, { x = 0, y = 0, width = 100, height = 100, speed = 100 })
+end
+
+function love.keypressed(key)
+    if key == "space" then
+        createRect()
+    end
 end
 
 function love.update(dt)
-    if love.keyboard.isDown("right") then
-        x = x + 100 * dt
-    elseif love.keyboard.isDown("left") then
-        x = x - 100 * dt
+    for i, rect in ipairs(listOfRectangles) do
+        rect.x = rect.x + rect.speed * dt
     end
 end
 
 function love.draw()
-    -- love.graphics.rectangle("fill", x, 200, 50, 80)
-    love.graphics.print("Test", 100, 100)
+    for i, rect in ipairs(listOfRectangles) do
+        love.graphics.rectangle("fill", rect.x, rect.y, rect.width, rect.height)
+    end
 end
