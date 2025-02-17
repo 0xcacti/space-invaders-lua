@@ -1,3 +1,5 @@
+require("example")
+print(test)
 function love.load()
     listOfRectangles = {}
 end
