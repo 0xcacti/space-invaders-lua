@@ -1,23 +1,32 @@
 function love.load()
-    Object = require("classic")
-    require("shape")
-    require("circle")
-    require("rectangle")
-
-    myImage = love.graphics.newImage("sheep.png")
-
-    r1 = Rectangle(100, 100, 200, 50)
-    r2 = Circle(350, 80, 40)
-end
-
-function love.keypressed(key)
+    circle = {}
+    circle.x = 100
+    circle.y = 100
+    circle.radius = 25
+    circle.speed = 200
 end
 
 function love.update(dt)
-    r1:update(dt)
-    r2:update(dt)
+    mouse_x, mouse_y = love.mouse.getPosition()
+    angle = math.atan2(mouse_y - circle.y, mouse_x - circle.x)
+    cos = math.cos(angle)
+    sin = math.sin(angle)
+
+    --Make the circle move towards the mouse
+    circle.x = circle.x + circle.speed * cos * dt
+    circle.y = circle.y + circle.speed * sin * dt
 end
 
 function love.draw()
-    love.graphics.draw(myImage, 100, 100, 0, -1, 2)
+    love.graphics.circle("line", circle.x, circle.y, circle.radius)
+
+    --Print the angle
+    love.graphics.print("angle: " .. angle, 10, 10)
+
+    --Here are some lines to visualize the velocities
+    love.graphics.line(circle.x, circle.y, mouse_x, circle.y)
+    love.graphics.line(circle.x, circle.y, circle.x, mouse_y)
+
+    --The angle
+    love.graphics.line(circle.x, circle.y, mouse_x, mouse_y)
 end
