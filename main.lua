@@ -4,9 +4,10 @@ function love.load()
     require("circle")
     require("rectangle")
 
+    myImage = love.graphics.newImage("sheep.png")
+
     r1 = Rectangle(100, 100, 200, 50)
     r2 = Circle(350, 80, 40)
-
 end
 
 function love.keypressed(key)
@@ -18,6 +19,5 @@ function love.update(dt)
 end
 
 function love.draw()
-    r1:draw()
-    r2:draw()
+    love.graphics.draw(myImage, 100, 100, 0, -1, 2)
 end
