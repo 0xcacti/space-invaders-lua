@@ -6,6 +6,8 @@ function Player:new(x, y)
 end
 
 function Player:update(dt)
+    Player.super.update(self, dt)
+
     if love.keyboard.isDown("left") then
         self.x = self.x - 200 * dt
     elseif love.keyboard.isDown("right") then
