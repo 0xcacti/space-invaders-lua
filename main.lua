@@ -1,6 +1,13 @@
 local player
 
 function love.load()
+    local game_state = 'menu'
+    local menu_options = { 'Play', 'Options' }
+    local selected_menu_item = 1
+    local window_width = love.graphics.getWidth()
+    local window_height = love.graphics.getHeight()
+    local font = love.graphics.newFont(20)
+
     local Player = require("src.entities.player")
     local Red = require("src.entities.red")
     local Green = require("src.entities.green")
