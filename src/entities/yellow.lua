@@ -30,6 +30,7 @@ end
 
 function Yellow:draw()
     love.graphics.draw(self.image, self.x, self.y)
+    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
 end
 
 return Yellow
