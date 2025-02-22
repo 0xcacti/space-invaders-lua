@@ -28,9 +28,14 @@ function love.update(dt)
 end
 
 function love.draw()
-    player:draw()
-    red:draw()
-    yellow:draw()
-    green:draw()
-    barricade:draw()
+    if game_state == 'menu' then
+    elseif game_state == 'options' then
+    elseif game_state == 'pause' then
+    elseif game_state == 'play' then
+        player:draw()
+        red:draw()
+        yellow:draw()
+        green:draw()
+        barricade:draw()
+    end
 end
