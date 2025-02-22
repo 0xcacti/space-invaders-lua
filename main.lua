@@ -1,12 +1,16 @@
 local player
+local game_state
+local font
+local window_width
+local window_height
 
 function love.load()
-    local game_state = 'menu'
+    game_state = 'play'
+    window_width = love.graphics.getWidth()
+    window_height = love.graphics.getHeight()
     local menu_options = { 'Play', 'Options' }
     local selected_menu_item = 1
-    local window_width = love.graphics.getWidth()
-    local window_height = love.graphics.getHeight()
-    local font = love.graphics.newFont(20)
+    font = love.graphics.newFont(20)
 
     local Player = require("src.entities.player")
     local Red = require("src.entities.red")
@@ -32,6 +36,7 @@ function love.draw()
     elseif game_state == 'options' then
     elseif game_state == 'pause' then
     elseif game_state == 'play' then
+        love.graphics.print("999999", font, window_width - 80, 20)
         player:draw()
         red:draw()
         yellow:draw()
