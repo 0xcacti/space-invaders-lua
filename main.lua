@@ -1,22 +1,17 @@
-function love.load()
-    Object = require("classic")
-    require("entity")
-    require("player")
-    require("wall")
-    player = Player(100, 100)
-    wall = Wall(200, 100)
-end
+local player
 
-function checkCollision(p1, p2)
+function love.load()
+    print("Starting load")
+    local Player = require("src.entities.player")
+    print("Got Player:", Player)
+    player = Player:new()
+    print("Created player:", player)
 end
 
 function love.update(dt)
     player:update(dt)
-    wall:update(dt)
-    player:resolveCollision(wall)
 end
 
 function love.draw()
     player:draw()
-    wall:draw()
 end
