@@ -5,10 +5,12 @@ function love.load()
     local Red = require("src.entities.red")
     local Green = require("src.entities.green")
     local Yellow = require("src.entities.yellow")
+    local Barricade = require("src.entities.barricade")
     player = Player:new()
     red = Red:new()
     green = Green:new()
     yellow = Yellow:new()
+    barricade = Barricade:new()
 end
 
 function love.update(dt)
@@ -23,4 +25,5 @@ function love.draw()
     red:draw()
     yellow:draw()
     green:draw()
+    barricade:draw()
 end
