@@ -1,17 +1,26 @@
 local player
 
 function love.load()
-    print("Starting load")
     local Player = require("src.entities.player")
-    print("Got Player:", Player)
+    local Red = require("src.entities.red")
+    local Green = require("src.entities.green")
+    local Yellow = require("src.entities.yellow")
     player = Player:new()
-    print("Created player:", player)
+    red = Red:new()
+    green = Green:new()
+    yellow = Yellow:new()
 end
 
 function love.update(dt)
     player:update(dt)
+    red:update(dt)
+    yellow:update(dt)
+    green:update(dt)
 end
 
 function love.draw()
     player:draw()
+    red:draw()
+    yellow:draw()
+    green:draw()
 end
