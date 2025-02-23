@@ -4,13 +4,20 @@ local Red = Object:extend()
 
 function Red:new()
     Red.super.new(self)
-    self.image = love.graphics.newImage("assets/sprites/red.png")
+    self.image = love.graphics.newImage("assets/sprites/redquad.png")
+    self.frames = {}
+    self.width = 12
+    self.height = 8
+
+    table.insert(self.frames, love.graphics.newQuad(4, 0, self.width, self.height, self.image:getDimensions()))
+    local offset = 5 + self.width 
+    table.insert(self.frames, love.graphics.newQuad(offset, 0, self.width, self.height, self.image:getDimensions()))
+
     self.speed = 100
     self.x = 50
     self.y = 100
     self.score = 10
-    self.width = self.image:getWidth()
-    self.height = self.image:getHeight()
+    self.current_frame = 1
     self.is_dead = false
     self.chance_to_shoot = 0.001
 
@@ -29,6 +36,11 @@ function Red:update(dt)
         self.x = window_width - self.width
         self.speed = -self.speed
         self.y = self.y + self.height
+    end
+
+    self.current_frame = self.current_frame +  dt
+    if self.current_frame >= 3 then
+        self.current_frame = 1
     end
 end
 
@@ -61,8 +73,7 @@ function Red:checkCollision(obj)
 end
 
 function Red:draw()
-    love.graphics.draw(self.image, self.x, self.y)
-    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+    love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y)
 end
 
 return Red
