@@ -1,4 +1,5 @@
 local Object = require("lib.classic")
+local Bullet = require("src.entities.bullet")
 local Player = Object:extend()
 
 function Player:new()
@@ -8,6 +9,7 @@ function Player:new()
     self.speed = 200
     self.x = 800
     self.y = 600
+    self.lives = 3
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
     return self
@@ -27,6 +29,37 @@ function Player:update(dt)
     elseif self.x + self.width > window_width then
         self.x = window_width - self.width
     end
+end
+
+function Player:keyPressed(key, list_of_bullets)
+    if key == "space" then
+        table.insert(list_of_bullets, Bullet(self.x, self.y, false))
+    end
+end
+
+function Player:checkCollision(obj)
+    local self_left = self.x
+    local self_right = self.x + self.width
+    local self_top = self.y
+    local self_bottom = self.y + self.height
+
+    local obj_left = obj.x
+    local obj_right = obj.x + obj.width
+    local obj_top = obj.y
+    local obj_bottom = obj.y + obj.height
+
+    if self_right > obj_left and
+        self_left < obj_right and
+        self_bottom > obj_top and
+        self_top < obj_bottom then
+        self.lives = self.lives - 1
+        if self.lives == 0 then
+            love.load()
+        end
+        return true
+    end
+
+    return false
 end
 
 function Player:draw()

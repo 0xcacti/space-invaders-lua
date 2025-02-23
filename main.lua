@@ -1,46 +1,69 @@
 local player
 local game_state
-local font
-local window_width
-local window_height
+local player_bullets
 
 function love.load()
     game_state = 'play'
-    window_width = love.graphics.getWidth()
-    window_height = love.graphics.getHeight()
-    local menu_options = { 'Play', 'Options' }
-    local selected_menu_item = 1
-    font = love.graphics.newFont(20)
 
     local Player = require("src.entities.player")
     local Red = require("src.entities.red")
-    local Green = require("src.entities.green")
-    local Yellow = require("src.entities.yellow")
-    local Barricade = require("src.entities.barricade")
+    local ScoreBoard = require("src.systems.score_board")
     player = Player:new()
     red = Red:new()
-    green = Green:new()
-    yellow = Yellow:new()
-    barricade = Barricade:new()
+    player_bullets = {}
+    enemy_bullets = {}
+
+    score_board = ScoreBoard:new(20, 20)
+    print(score_board)
 end
 
 function love.update(dt)
     player:update(dt)
     red:update(dt)
-    yellow:update(dt)
-    green:update(dt)
+    score_board:update(dt)
+
+    for i, bullet in ipairs(player_bullets) do
+        bullet:update(dt)
+        local hit = bullet:checkCollision(red)
+        if hit then
+            if red:checkCollision(bullet) then
+                score_board.score = score_board.score + red.score
+            end
+        end
+
+        if bullet.is_dead then
+            table.remove(player_bullets, i)
+        end
+    end
+
+    red:chanceToShoot(enemy_bullets)
+
+    for i, bullet in ipairs(enemy_bullets) do
+        bullet:update(dt)
+        local hit = bullet:checkCollision(player)
+        if hit then
+            player:checkCollision(bullet)
+            table.remove(enemy_bullets, i)
+        end
+    end
+end
+
+function love.keypressed(key)
+    player:keyPressed(key, player_bullets)
 end
 
 function love.draw()
-    if game_state == 'menu' then
-    elseif game_state == 'options' then
-    elseif game_state == 'pause' then
-    elseif game_state == 'play' then
-        love.graphics.print("999999", font, window_width - 80, 20)
-        player:draw()
+    player:draw()
+    if not red.is_dead then
         red:draw()
-        yellow:draw()
-        green:draw()
-        barricade:draw()
+    end
+    score_board:draw()
+
+    for _, bullet in ipairs(player_bullets) do
+        bullet:draw()
+    end
+
+    for _, bullet in ipairs(enemy_bullets) do
+        bullet:draw()
     end
 end
