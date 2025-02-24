@@ -8,7 +8,7 @@ function ZigZagBullet:new(x, y, is_enemy)
     self.image:setFilter("nearest", "nearest")
     self.frames = {}
 
-    -- Your quad setup: 3 frames (left, center, right)
+
     for i = 0, 2 do
         local offset = i * 4
         local width = 3
@@ -20,20 +20,17 @@ function ZigZagBullet:new(x, y, is_enemy)
     end
 
     self.current_frame = 1
-    self.animation_timer = 0
-    self.animation_speed = 5  -- Controls how fast it oscillates between frames
+    self.animation_direction = 1
 
     self.scale = 4
-    self.width = 1 * self.scale          -- Collision width
-    self.height = 7 * self.scale         -- Collision height
-    self.visual_width = 3 * self.scale   -- Visual width for centering
-    self.visual_height = 7 * self.scale  -- Visual height
-
+    self.width = 1 * self.scale
+    self.height = 7 * self.scale
+    self.visual_width = 3 * self.scale
+    self.visual_height = 7 * self.scale
     return self
 end
 
 function ZigZagBullet:update(dt)
-    -- Straight vertical movement
     if self.is_enemy then
         self.y = self.y + self.speed * dt
     else
@@ -41,31 +38,49 @@ function ZigZagBullet:update(dt)
     end
     local window_height = love.graphics.getHeight()
 
-    if self.y < 0 or self.y + self.height > window_height then
+    if self.y < 0 or self.y + self.width > window_height then
         self.is_dead = true
     end
 
-    -- Animate through frames for the wiggle effect
-    self.animation_timer = self.animation_timer + dt * self.animation_speed
-    self.current_frame = 1 + math.abs(math.sin(self.animation_timer) * 2)  -- Oscillates between 1 and 3
+    self.current_frame = self.current_frame + (dt * 5 * self.animation_direction)
+    if self.animation_direction == 1 and self.current_frame >= #self.frames then
+        self.animation_direction = -1
+        self.current_frame = #self.frames
+    elseif self.animation_direction == -1 and self.current_frame <= 1 then
+        self.animation_direction = 1
+        self.current_frame = 1
+    end
+
 end
 
 function ZigZagBullet:draw()
+    local rotation
     local currentFrame = math.floor(self.current_frame)
+    
+    if currentFrame == 1 then 
+        rotation = -math.pi/6
+    elseif currentFrame == 2 then
+        rotation = math.pi/6
+    else
+        rotation = math.pi/4
+    end
+
     love.graphics.draw(
-        self.image,
-        self.frames[currentFrame],
-        self.x - self.visual_width / 2,  -- Center the sprite
-        self.y,
-        0,  -- No rotation
+        self.image, 
+        self.frames[currentFrame], 
+        self.x + self.visual_width/2, 
+        self.y,  -- center point for rotation
+        rotation,
+        self.scale, 
         self.scale,
-        self.scale
+        self.visual_width/(2*self.scale), 
+        0
     )
 end
 
 function ZigZagBullet:checkCollision(obj)
-    local self_left = self.x - self.visual_width / 2
-    local self_right = self.x + self.visual_width / 2
+    local self_left = self.x
+    local self_right = self.x + self.width
     local self_top = self.y
     local self_bottom = self.y + self.height
 
