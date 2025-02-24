@@ -54,7 +54,6 @@ function Bullet:checkCollision(obj)
         return true
     end
 
-
     return false
 end
 
