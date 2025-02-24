@@ -3,8 +3,14 @@ local Bullet = Object:extend()
 
 function Bullet:new(x, y, is_enemy)
     Bullet.super.new(self)
-    self.image = love.graphics.newImage("assets/sprites/bullet.png")
     self.is_enemy = is_enemy
+    if is_enemy then
+        self.image = love.graphics.newImage("assets/sprites/bullet.png")
+    else
+        self.image = love.graphics.newImage("assets/sprites/player_bullet.png")
+        self.image:setFilter("nearest", "nearest")
+        self.scale = 4
+    end
     self.x = x
     self.y = y
     if is_enemy then
@@ -32,7 +38,7 @@ function Bullet:update(dt)
 end
 
 function Bullet:draw()
-    love.graphics.draw(self.image, self.x, self.y)
+    love.graphics.draw(self.image, self.x, self.y, 0, self.scale, self.scale)
 end
 
 function Bullet:checkCollision(obj)
