@@ -1,6 +1,7 @@
 local Object = require("lib.classic")
 local StraightBullet = require("src.entities.bullets.straight")
 local PlungerBullet = require("src.entities.bullets.plunger")
+local SquigglyBullet = require("src.entities.bullets.squiggly")
 local Red = Object:extend()
 
 function Red:new()
@@ -35,7 +36,7 @@ end
 
 function Red:chanceToShoot(enemy_bullets)
     if love.math.random() < self.chance_to_shoot and not self.is_dead then
-        table.insert(enemy_bullets, PlungerBullet(self.x, self.y, true))
+        table.insert(enemy_bullets, SquigglyBullet(self.x, self.y, true))
     end
 end
 
@@ -83,7 +84,7 @@ end
 
 function Red:draw()
     love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y, 0, self.scale, self
-    .scale)
+        .scale)
 end
 
 return Red

@@ -5,8 +5,8 @@ local player_bullets
 function love.load()
     game_state = 'play'
 
-    local PlungerBullet = require("src.entities.bullets.plunger")
-    bullet = PlungerBullet:new(100, 100, true)
+    local SquigglyBullet = require("src.entities.bullets.squiggly")
+    bullet = SquigglyBullet:new(100, 100, true)
 
 
     local Player = require("src.entities.player")
