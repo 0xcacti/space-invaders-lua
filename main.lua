@@ -5,8 +5,8 @@ local player_bullets
 function love.load()
     game_state = 'play'
 
-    local SquigglyBullet = require("src.entities.bullets.squiggly")
-    bullet = SquigglyBullet:new(100, 100, true)
+    local ZigZagBullet = require("src.entities.bullets.zigzag")
+    bullet = ZigZagBullet:new(100, 100, true)
 
 
     local Player = require("src.entities.player")
@@ -57,17 +57,37 @@ function love.keypressed(key)
 end
 
 function love.draw()
-    for i = 1, #bullet.frames do
-        -- Position each frame 50 pixels apart
-        local x = 50 + (i - 1) * 50
-        local y = 50
 
-        -- Draw frame number
-        love.graphics.print("Frame " .. i, x, y - 20)
+for i = 1, #bullet.frames do
+   local x = 50 + (i-1) * 50
+   local y = 150
+   local rotation
 
-        -- Draw the actual frame
-        love.graphics.draw(bullet.image, bullet.frames[i], x, y, 0, bullet.scale, bullet.scale)
+   if i == 1 then 
+        rotation = -math.pi/6
+    elseif i == 2 then
+        rotation = math.pi/6
+    else
+        rotation = math.pi/4
     end
+
+
+
+   -- Draw three rotated versions of each frame
+       love.graphics.draw(
+           bullet.image,
+           bullet.frames[i],
+           x,
+           y, 
+           rotation,
+           bullet.scale,
+           bullet.scale,
+           1.5,  -- Center of rotation adjustments
+           3.5
+       )
+end
+
+
     player:draw()
     if not red.is_dead then
         red:draw()

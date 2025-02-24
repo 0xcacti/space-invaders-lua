@@ -2,6 +2,7 @@ local Object = require("lib.classic")
 local StraightBullet = require("src.entities.bullets.straight")
 local PlungerBullet = require("src.entities.bullets.plunger")
 local SquigglyBullet = require("src.entities.bullets.squiggly")
+local ZigZagBullet = require("src.entities.bullets.zigzag")
 local Red = Object:extend()
 
 function Red:new()
@@ -36,7 +37,7 @@ end
 
 function Red:chanceToShoot(enemy_bullets)
     if love.math.random() < self.chance_to_shoot and not self.is_dead then
-        table.insert(enemy_bullets, SquigglyBullet(self.x, self.y, true))
+        table.insert(enemy_bullets, ZigZagBullet(self.x, self.y, true))
     end
 end
 
