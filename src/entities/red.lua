@@ -5,14 +5,21 @@ local Red = Object:extend()
 function Red:new()
     Red.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/redquad.png")
+    self.image:setFilter("nearest", "nearest")
     self.frames = {}
-    self.width = 12
-    self.height = 8
 
-    table.insert(self.frames, love.graphics.newQuad(4, 0, self.width, self.height, self.image:getDimensions()))
-    local offset = 5 + self.width 
-    table.insert(self.frames, love.graphics.newQuad(offset, 0, self.width, self.height, self.image:getDimensions()))
+    -- logical size
+    self.scale = 4
+    self.image_width = 12
+    self.image_height = 8
+    self.width = self.image_width * self.scale
+    self.height = self.image_height * self.scale
 
+    table.insert(self.frames, love.graphics.newQuad(0, 0, self.image_width, self.image_height, self.image:getDimensions()))
+    table.insert(self.frames,
+        love.graphics.newQuad(self.image_width + 1, 0, self.image_width, self.image_height, self.image:getDimensions()))
+
+    --  enemy atributes
     self.speed = 100
     self.x = 50
     self.y = 100
@@ -22,6 +29,12 @@ function Red:new()
     self.chance_to_shoot = 0.001
 
     return self
+end
+
+function Red:chanceToShoot(enemy_bullets)
+    if love.math.random() < self.chance_to_shoot and not self.is_dead then
+        table.insert(enemy_bullets, Bullet(self.x, self.y, true))
+    end
 end
 
 function Red:update(dt)
@@ -38,15 +51,9 @@ function Red:update(dt)
         self.y = self.y + self.height
     end
 
-    self.current_frame = self.current_frame +  dt
+    self.current_frame = self.current_frame + dt
     if self.current_frame >= 3 then
         self.current_frame = 1
-    end
-end
-
-function Red:chanceToShoot(enemy_bullets)
-    if love.math.random() < self.chance_to_shoot and not self.is_dead then
-        table.insert(enemy_bullets, Bullet(self.x, self.y, true))
     end
 end
 
@@ -73,7 +80,7 @@ function Red:checkCollision(obj)
 end
 
 function Red:draw()
-    love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y)
+    love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y, 0, 4, 4)
 end
 
 return Red
