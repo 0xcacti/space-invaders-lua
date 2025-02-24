@@ -1,5 +1,6 @@
 local Object = require("lib.classic")
-local Bullet = require("src.entities.bullet")
+local StraightBullet = require("src.entities.bullets.straight")
+local PlungerBullet = require("src.entities.bullets.plunger")
 local Red = Object:extend()
 
 function Red:new()
@@ -15,7 +16,8 @@ function Red:new()
     self.width = self.image_width * self.scale
     self.height = self.image_height * self.scale
 
-    table.insert(self.frames, love.graphics.newQuad(0, 0, self.image_width, self.image_height, self.image:getDimensions()))
+    table.insert(self.frames,
+        love.graphics.newQuad(0, 0, self.image_width, self.image_height, self.image:getDimensions()))
     table.insert(self.frames,
         love.graphics.newQuad(self.image_width + 1, 0, self.image_width, self.image_height, self.image:getDimensions()))
 
@@ -26,14 +28,14 @@ function Red:new()
     self.score = 10
     self.current_frame = 1
     self.is_dead = false
-    self.chance_to_shoot = 0.001
+    self.chance_to_shoot = 0.01
 
     return self
 end
 
 function Red:chanceToShoot(enemy_bullets)
     if love.math.random() < self.chance_to_shoot and not self.is_dead then
-        table.insert(enemy_bullets, Bullet(self.x, self.y, true))
+        table.insert(enemy_bullets, PlungerBullet(self.x, self.y, true))
     end
 end
 
@@ -52,7 +54,7 @@ function Red:update(dt)
     end
 
     self.current_frame = self.current_frame + dt
-    if self.current_frame >= 3 then
+    if self.current_frame >= #self.frames + 1 then
         self.current_frame = 1
     end
 end
@@ -80,7 +82,8 @@ function Red:checkCollision(obj)
 end
 
 function Red:draw()
-    love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y, 0, 4, 4)
+    love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y, 0, self.scale, self
+    .scale)
 end
 
 return Red

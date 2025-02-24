@@ -1,30 +1,17 @@
-local Object = require("lib.classic")
-local Bullet = Object:extend()
+local Bullet = require("src.entities.bullets.bullet")
+local StraightBullet = Bullet:extend()
 
-function Bullet:new(x, y, is_enemy)
-    Bullet.super.new(self)
-    self.is_enemy = is_enemy
-    if is_enemy then
-        self.image = love.graphics.newImage("assets/sprites/bullet.png")
-    else
-        self.image = love.graphics.newImage("assets/sprites/player_bullet.png")
-        self.image:setFilter("nearest", "nearest")
-        self.scale = 4
-    end
-    self.x = x
-    self.y = y
-    if is_enemy then
-        self.speed = 300
-    else
-        self.speed = 700
-    end
-    self.width = self.image:getWidth()
-    self.height = self.image:getHeight()
-    self.is_dead = false
+function StraightBullet:new(x, y, is_enemy)
+    StraightBullet.super.new(self, x, y, is_enemy)
+    self.image = love.graphics.newImage("assets/sprites/bullets/straight.png")
+    self.image:setFilter("nearest", "nearest")
+    self.scale = 4
+    self.width = self.image:getWidth() * self.scale
+    self.height = self.image:getHeight() * self.scale
     return self
 end
 
-function Bullet:update(dt)
+function StraightBullet:update(dt)
     if self.is_enemy then
         self.y = self.y + self.speed * dt
     else
@@ -37,11 +24,11 @@ function Bullet:update(dt)
     end
 end
 
-function Bullet:draw()
+function StraightBullet:draw()
     love.graphics.draw(self.image, self.x, self.y, 0, self.scale, self.scale)
 end
 
-function Bullet:checkCollision(obj)
+function StraightBullet:checkCollision(obj)
     local self_left = self.x
     local self_right = self.x + self.width
     local self_top = self.y
@@ -63,4 +50,4 @@ function Bullet:checkCollision(obj)
     return false
 end
 
-return Bullet
+return StraightBullet

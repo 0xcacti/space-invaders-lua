@@ -1,5 +1,5 @@
 local Object = require("lib.classic")
-local Bullet = require("src.entities.bullet")
+local StraightBullet = require("src.entities.bullets.straight")
 local Player = Object:extend()
 
 function Player:new()
@@ -33,7 +33,7 @@ end
 
 function Player:keyPressed(key, list_of_bullets)
     if key == "space" then
-        table.insert(list_of_bullets, Bullet(self.x, self.y, false))
+        table.insert(list_of_bullets, StraightBullet(self.x, self.y, false))
     end
 end
 

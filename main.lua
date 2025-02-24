@@ -5,6 +5,10 @@ local player_bullets
 function love.load()
     game_state = 'play'
 
+    local PlungerBullet = require("src.entities.bullets.plunger")
+    bullet = PlungerBullet:new(100, 100, true)
+
+
     local Player = require("src.entities.player")
     local Red = require("src.entities.red")
     local ScoreBoard = require("src.systems.score_board")
@@ -53,6 +57,17 @@ function love.keypressed(key)
 end
 
 function love.draw()
+    for i = 1, #bullet.frames do
+        -- Position each frame 50 pixels apart
+        local x = 50 + (i - 1) * 50
+        local y = 50
+
+        -- Draw frame number
+        love.graphics.print("Frame " .. i, x, y - 20)
+
+        -- Draw the actual frame
+        love.graphics.draw(bullet.image, bullet.frames[i], x, y, 0, bullet.scale, bullet.scale)
+    end
     player:draw()
     if not red.is_dead then
         red:draw()
