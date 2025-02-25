@@ -25,7 +25,7 @@ function ZigZagBullet:new(x, y, is_enemy)
     self.width = 1 * self.scale
     self.height = 7 * self.scale
     self.visual_width = 3 * self.scale
-    self.visual_height = 7 * self.scale
+    self.visual_height = 5 * self.scale
     return self
 end
 
@@ -42,9 +42,9 @@ function ZigZagBullet:update(dt)
     end
 
 
-    local animation_speed = 0.1                     -- Adjust this value for desired speed (smaller = faster)
+    local animation_speed = 0.1                     
 
-    self.frame_timer = (self.frame_timer or 0) + dt -- dt is delta time from your update loop
+    self.frame_timer = (self.frame_timer or 0) + dt 
 
     if self.frame_timer >= animation_speed then
         self.frame_timer = self.frame_timer - animation_speed
@@ -68,23 +68,28 @@ end
 
 function ZigZagBullet:draw()
     local rotation
+    local scaleX = self.scale
     local currentFrame = math.floor(self.current_frame)
-
+    local x_loc = self.x
+    
     if currentFrame == 1 then
         rotation = -math.pi / 6
+        x_loc = self.x - self.visual_width / 2 + (self.width )
     elseif currentFrame == 2 then
         rotation = math.pi / 4
+        x_loc = self.x + (self.width)
     else
         rotation = math.pi / 6
+        x_loc = self.x + self.visual_width / 2 + (self.width)
     end
 
     love.graphics.draw(
         self.image,
         self.frames[currentFrame],
-        self.x + self.visual_width / 2,
-        self.y / 2, -- center point for rotation
+        x_loc,
+        self.y + self.visual_height / 2,
         rotation,
-        self.scale,
+        scaleX,
         self.scale,
         self.visual_width / (2 * self.scale),
         0
