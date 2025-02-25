@@ -8,18 +8,17 @@ function ZigZagBullet:new(x, y, is_enemy)
     self.image:setFilter("nearest", "nearest")
     self.frames = {}
 
+    table.insert(self.frames,
+        love.graphics.newQuad(0, 0, 3, 5, self.image:getDimensions()))
 
-    for i = 0, 2 do
-        local offset = i * 4
-        local width = 3
-        if i == 2 then
-            width = 4
-        end
-        table.insert(self.frames,
-            love.graphics.newQuad(offset, 0, width, 5, self.image:getDimensions()))
-    end
+    table.insert(self.frames,
+        love.graphics.newQuad(4, 0, 5, 4, self.image:getDimensions()))
+
+    table.insert(self.frames,
+        love.graphics.newQuad(9, 0, 3, 5, self.image:getDimensions()))
 
     self.current_frame = 1
+    self.frame_timer = 0
     self.animation_direction = 1
 
     self.scale = 4
@@ -42,13 +41,28 @@ function ZigZagBullet:update(dt)
         self.is_dead = true
     end
 
-    self.current_frame = self.current_frame + (dt * 5 * self.animation_direction)
-    if self.animation_direction == 1 and self.current_frame >= #self.frames then
-        self.animation_direction = -1
-        self.current_frame = #self.frames
-    elseif self.animation_direction == -1 and self.current_frame <= 1 then
-        self.animation_direction = 1
-        self.current_frame = 1
+
+    local animation_speed = 0.1                     -- Adjust this value for desired speed (smaller = faster)
+
+    self.frame_timer = (self.frame_timer or 0) + dt -- dt is delta time from your update loop
+
+    if self.frame_timer >= animation_speed then
+        self.frame_timer = self.frame_timer - animation_speed
+
+        -- Move frames based on direction
+        self.current_frame = self.current_frame + self.animation_direction
+
+        -- Check upper bound (3)
+        if self.animation_direction == 1 and self.current_frame >= 3 then
+            self.current_frame = 3
+            self.animation_direction = -1
+        end
+
+        -- Check lower bound (1)
+        if self.animation_direction == -1 and self.current_frame <= 1 then
+            self.current_frame = 1
+            self.animation_direction = 1
+        end
     end
 end
 
@@ -59,9 +73,9 @@ function ZigZagBullet:draw()
     if currentFrame == 1 then
         rotation = -math.pi / 6
     elseif currentFrame == 2 then
-        rotation = math.pi / 6
-    else
         rotation = math.pi / 4
+    else
+        rotation = math.pi / 6
     end
 
     love.graphics.draw(
@@ -70,7 +84,6 @@ function ZigZagBullet:draw()
         self.x + self.visual_width / 2,
         self.y / 2, -- center point for rotation
         rotation,
-
         self.scale,
         self.scale,
         self.visual_width / (2 * self.scale),

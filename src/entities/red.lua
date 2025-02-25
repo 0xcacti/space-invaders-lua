@@ -32,6 +32,7 @@ function Red:new()
     self.is_dead = false
     self.chance_to_shoot = 0.01
 
+
     return self
 end
 

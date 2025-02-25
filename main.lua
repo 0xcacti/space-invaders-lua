@@ -65,12 +65,10 @@ function love.draw()
         if i == 1 then
             rotation = -math.pi / 6
         elseif i == 2 then
-            rotation = math.pi / 6
-        else
             rotation = math.pi / 4
+        else
+            rotation = math.pi / 6
         end
-
-
 
         -- Draw three rotated versions of each frame
         love.graphics.draw(
