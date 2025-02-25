@@ -50,30 +50,30 @@ function ZigZagBullet:update(dt)
         self.animation_direction = 1
         self.current_frame = 1
     end
-
 end
 
 function ZigZagBullet:draw()
     local rotation
     local currentFrame = math.floor(self.current_frame)
-    
-    if currentFrame == 1 then 
-        rotation = -math.pi/6
+
+    if currentFrame == 1 then
+        rotation = -math.pi / 6
     elseif currentFrame == 2 then
-        rotation = math.pi/6
+        rotation = math.pi / 6
     else
-        rotation = math.pi/4
+        rotation = math.pi / 4
     end
 
     love.graphics.draw(
-        self.image, 
-        self.frames[currentFrame], 
-        self.x + self.visual_width/2, 
-        self.y,  -- center point for rotation
+        self.image,
+        self.frames[currentFrame],
+        self.x + self.visual_width / 2,
+        self.y / 2, -- center point for rotation
         rotation,
-        self.scale, 
+
         self.scale,
-        self.visual_width/(2*self.scale), 
+        self.scale,
+        self.visual_width / (2 * self.scale),
         0
     )
 end

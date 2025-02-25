@@ -57,35 +57,34 @@ function love.keypressed(key)
 end
 
 function love.draw()
+    for i = 1, #bullet.frames do
+        local x = 50 + (i - 1) * 50
+        local y = 150
+        local rotation
 
-for i = 1, #bullet.frames do
-   local x = 50 + (i-1) * 50
-   local y = 150
-   local rotation
+        if i == 1 then
+            rotation = -math.pi / 6
+        elseif i == 2 then
+            rotation = math.pi / 6
+        else
+            rotation = math.pi / 4
+        end
 
-   if i == 1 then 
-        rotation = -math.pi/6
-    elseif i == 2 then
-        rotation = math.pi/6
-    else
-        rotation = math.pi/4
+
+
+        -- Draw three rotated versions of each frame
+        love.graphics.draw(
+            bullet.image,
+            bullet.frames[i],
+            x,
+            y,
+            rotation,
+            bullet.scale,
+            bullet.scale,
+            1.5, -- Center of rotation adjustments
+            3.5
+        )
     end
-
-
-
-   -- Draw three rotated versions of each frame
-       love.graphics.draw(
-           bullet.image,
-           bullet.frames[i],
-           x,
-           y, 
-           rotation,
-           bullet.scale,
-           bullet.scale,
-           1.5,  -- Center of rotation adjustments
-           3.5
-       )
-end
 
 
     player:draw()
