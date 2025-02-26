@@ -42,26 +42,24 @@ function ZigZagBullet:update(dt)
     end
 
 
-    local animation_speed = 0.1                     
+    local animation_speed = 0.1
 
-    self.frame_timer = (self.frame_timer or 0) + dt 
+    self.frame_timer = (self.frame_timer or 0) + dt
 
     if self.frame_timer >= animation_speed then
         self.frame_timer = self.frame_timer - animation_speed
 
-        -- Move frames based on direction
-        self.current_frame = self.current_frame + self.animation_direction
-
-        -- Check upper bound (3)
-        if self.animation_direction == 1 and self.current_frame >= 3 then
-            self.current_frame = 3
+        if self.current_frame == 1 then
+            self.current_frame = 2
+        elseif self.current_frame == 2 then
+            if self.animation_direction == 1 then
+                self.current_frame = 3
+            else
+                self.current_frame = 1
+            end
+        elseif self.current_frame == 3 then
+            self.current_frame = 2
             self.animation_direction = -1
-        end
-
-        -- Check lower bound (1)
-        if self.animation_direction == -1 and self.current_frame <= 1 then
-            self.current_frame = 1
-            self.animation_direction = 1
         end
     end
 end
@@ -71,13 +69,14 @@ function ZigZagBullet:draw()
     local scaleX = self.scale
     local currentFrame = math.floor(self.current_frame)
     local x_loc = self.x
-    
+
+
     if currentFrame == 1 then
         rotation = -math.pi / 6
-        x_loc = self.x - self.visual_width / 2 + (self.width )
+        x_loc = self.x - self.visual_width / 2 + (self.width)
     elseif currentFrame == 2 then
         rotation = math.pi / 4
-        x_loc = self.x + (self.width)
+        x_loc = self.x + 2 * (self.width)
     else
         rotation = math.pi / 6
         x_loc = self.x + self.visual_width / 2 + (self.width)
