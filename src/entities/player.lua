@@ -33,7 +33,7 @@ end
 
 function Player:keyPressed(key, list_of_bullets)
     if key == "space" then
-        table.insert(list_of_bullets, StraightBullet(self.x, self.y, false))
+        table.insert(list_of_bullets, StraightBullet(self.x + (self.width / 2), self.y, false))
     end
 end
 
