@@ -36,14 +36,11 @@ function ZigZagBullet:update(dt)
         self.y = self.y - self.speed * dt
     end
     local window_height = love.graphics.getHeight()
-
     if self.y < 0 or self.y + self.width > window_height then
         self.is_dead = true
     end
 
-
     local animation_speed = 0.1
-
     self.frame_timer = (self.frame_timer or 0) + dt
 
     if self.frame_timer >= animation_speed then
@@ -51,6 +48,7 @@ function ZigZagBullet:update(dt)
 
         if self.current_frame == 1 then
             self.current_frame = 2
+            self.animation_direction = 1 -- reset direction for forward motion
         elseif self.current_frame == 2 then
             if self.animation_direction == 1 then
                 self.current_frame = 3
