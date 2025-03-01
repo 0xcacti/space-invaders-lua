@@ -4,10 +4,11 @@ local Player = require("src.entities.player")
 local Red = require("src.entities.red")
 local ScoreBoard = require("src.ui.score_board")
 
-function GameState:init()
+function GameState:new()
     GameState.super.new(self)
     self.state = 'play'
-    self.player = Player()
+    self.player = Player:new()
+    self.red = Red:new()
     self.enemies = { Red:new() }
     self.player_bullets = {}
     self.enemy_bullets = {}
@@ -19,51 +20,51 @@ function GameState:init()
 end
 
 function GameState:update(dt)
-    player:update(dt)
-    red:update(dt)
+    self.player:update(dt)
+    self.red:update(dt)
 
-    for i, bullet in ipairs(player_bullets) do
+    for i, bullet in ipairs(self.player_bullets) do
         bullet:update(dt)
-        local hit = bullet:checkCollision(red)
+        local hit = bullet:checkCollision(self.red)
         if hit then
-            if red:checkCollision(bullet) then
-                self.score_board.score = self.score_board.score + red.score
+            if self.red:checkCollision(bullet) then
+                self.score_board.score = self.score_board.score + self.red.score
             end
         end
 
         if bullet.is_dead then
-            table.remove(player_bullets, i)
+            table.remove(self.player_bullets, i)
         end
     end
 
-    red:chanceToShoot(enemy_bullets)
+    self.red:chanceToShoot(self.enemy_bullets)
 
-    for i, bullet in ipairs(enemy_bullets) do
+    for i, bullet in ipairs(self.enemy_bullets) do
         bullet:update(dt)
-        local hit = bullet:checkCollision(player)
+        local hit = bullet:checkCollision(self.player)
         if hit then
-            player:checkCollision(bullet)
-            table.remove(enemy_bullets, i)
+            self.player:checkCollision(bullet)
+            table.remove(self.enemy_bullets, i)
         end
     end
 end
 
 function GameState:keypressed(key)
-    player:keyPressed(key, player_bullets)
+    self.player:keyPressed(key, self.player_bullets)
 end
 
 function GameState:draw()
-    player:draw()
-    if not red.is_dead then
-        red:draw()
+    self.player:draw()
+    if not self.red.is_dead then
+        self.red:draw()
     end
-    score_board:draw()
+    self.score_board:draw()
 
-    for _, bullet in ipairs(player_bullets) do
+    for _, bullet in ipairs(self.player_bullets) do
         bullet:draw()
     end
 
-    for _, bullet in ipairs(enemy_bullets) do
+    for _, bullet in ipairs(self.enemy_bullets) do
         bullet:draw()
     end
 end
