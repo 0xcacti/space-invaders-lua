@@ -16,7 +16,6 @@ function ScoreBoard:new(x, y)
 end
 
 function ScoreBoard:update(dt)
-
 end
 
 function ScoreBoard:draw()
