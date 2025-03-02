@@ -5,16 +5,17 @@ local Red = require("src.entities.red")
 local ScoreBoard = require("src.ui.score_board")
 
 function GameState:new()
-    GameState.super.new(self)
     self.state = 'play'
     self.player = Player:new()
     self.enemies = {}
 
+    self.red = Red:new(50, 100)
+    self.red2 = Red:new(50, 100)
     self.start_x = 50
     self.start_y = 100
 
     for i = 0, 10 do
-        local enemy = Red:new(self.start_x + i * 150, self.start_y + i * 50)
+        local enemy = Red(self.start_x + i * 20, self.start_y)
         print(enemy.x, enemy.y)
         table.insert(self.enemies, enemy)
     end
@@ -22,8 +23,6 @@ function GameState:new()
     self.enemy_bullets = {}
     self.score_board = ScoreBoard:new(20, 20)
     self.collision_manager = nil
-
-    return self
 end
 
 function GameState:update(dt)
@@ -70,6 +69,8 @@ end
 function GameState:draw()
     self.player:draw()
 
+    self.red:draw()
+    self.red2:draw()
     for _, enemy in ipairs(self.enemies) do
         if not enemy.is_dead then
             enemy:draw()

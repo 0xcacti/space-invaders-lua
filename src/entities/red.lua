@@ -6,7 +6,7 @@ local ZigZagBullet = require("src.entities.bullets.zigzag")
 local Red = Object:extend()
 
 function Red:new(x, y)
-    Red.super.new(self)
+    local self = Red.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/redquad.png")
     self.image:setFilter("nearest", "nearest")
     self.frames = {}
