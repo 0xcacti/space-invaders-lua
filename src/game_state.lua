@@ -8,27 +8,36 @@ function GameState:new()
     GameState.super.new(self)
     self.state = 'play'
     self.player = Player:new()
-    self.red = Red:new()
-    self.enemies = { Red:new() }
+    self.enemies = {}
+
+    self.start_x = 50
+    self.start_y = 100
+
+    for i = 0, 10 do
+        local enemy = Red:new(self.start_x + i * 150, self.start_y + i * 50)
+        print(enemy.x, enemy.y)
+        table.insert(self.enemies, enemy)
+    end
     self.player_bullets = {}
     self.enemy_bullets = {}
     self.score_board = ScoreBoard:new(20, 20)
     self.collision_manager = nil
-
 
     return self
 end
 
 function GameState:update(dt)
     self.player:update(dt)
-    self.red:update(dt)
 
     for i, bullet in ipairs(self.player_bullets) do
         bullet:update(dt)
-        local hit = bullet:checkCollision(self.red)
-        if hit then
-            if self.red:checkCollision(bullet) then
-                self.score_board.score = self.score_board.score + self.red.score
+        for _, enemy in ipairs(self.enemies) do
+            if not enemy.is_dead and bullet:checkCollision(enemy) then
+                if enemy:checkCollision(bullet) then
+                    self.score_board.score = self.score_board.score + enemy.score
+                    bullet.is_dead = true
+                    break
+                end
             end
         end
 
@@ -37,7 +46,12 @@ function GameState:update(dt)
         end
     end
 
-    self.red:chanceToShoot(self.enemy_bullets)
+    for _, enemy in ipairs(self.enemies) do
+        enemy:update(dt)
+        if not enemy.is_dead then
+            enemy:chanceToShoot(self.enemy_bullets)
+        end
+    end
 
     for i, bullet in ipairs(self.enemy_bullets) do
         bullet:update(dt)
@@ -55,9 +69,13 @@ end
 
 function GameState:draw()
     self.player:draw()
-    if not self.red.is_dead then
-        self.red:draw()
+
+    for _, enemy in ipairs(self.enemies) do
+        if not enemy.is_dead then
+            enemy:draw()
+        end
     end
+
     self.score_board:draw()
 
     for _, bullet in ipairs(self.player_bullets) do

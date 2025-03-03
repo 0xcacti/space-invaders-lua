@@ -5,7 +5,7 @@ local SquigglyBullet = require("src.entities.bullets.squiggly")
 local ZigZagBullet = require("src.entities.bullets.zigzag")
 local Red = Object:extend()
 
-function Red:new()
+function Red:new(x, y)
     Red.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/redquad.png")
     self.image:setFilter("nearest", "nearest")
@@ -24,9 +24,9 @@ function Red:new()
         love.graphics.newQuad(self.image_width + 1, 0, self.image_width, self.image_height, self.image:getDimensions()))
 
     --  enemy atributes
-    self.speed = 100
-    self.x = 50
-    self.y = 100
+    self.speed = 1
+    self.x = x
+    self.y = y
     self.score = 10
     self.current_frame = 1
     self.is_dead = false
