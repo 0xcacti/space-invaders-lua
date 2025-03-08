@@ -27,10 +27,21 @@ function GameState:new()
     self.enemy_bullets = {}
     self.score_board = ScoreBoard:new(20, 20)
     self.collision_manager = nil
+
+    self.move_timer = 0
+    self.move_interval = 1
+    self.move_direction = 1
+    self.move_step = width
 end
 
 function GameState:update(dt)
     self.player:update(dt)
+
+    self.move_timer = self.move_timer + dt
+    if self.move_timer >= self.move_interval then
+        self.move_timer = 0
+        self:moveEnemies()
+    end
 
     for i, bullet in ipairs(self.player_bullets) do
         bullet:update(dt)
@@ -49,12 +60,12 @@ function GameState:update(dt)
         end
     end
 
-    for _, enemy in ipairs(self.enemies) do
-        enemy:update(dt)
-        if not enemy.is_dead then
-            enemy:chanceToShoot(self.enemy_bullets)
-        end
-    end
+    -- for _, enemy in ipairs(self.enemies) do
+    --     enemy:update(dt)
+    --     if not enemy.is_dead then
+    --         enemy:chanceToShoot(self.enemy_bullets)
+    --     end
+    -- end
 
     for i, bullet in ipairs(self.enemy_bullets) do
         bullet:update(dt)
@@ -62,6 +73,34 @@ function GameState:update(dt)
         if hit then
             self.player:checkCollision(bullet)
             table.remove(self.enemy_bullets, i)
+        end
+    end
+end
+
+function GameState:moveEnemies()
+    local window_width = love.graphics.getWidth()
+    local should_move_down = false
+    for _, enemy in ipairs(self.enemies) do
+        local next_x = enemy.x + self.move_step * self.move_direction
+        if next_x < 0 or next_x + enemy.width > window_width then
+            should_move_down = true
+            self.move_direction = -self.move_direction
+            break
+        end
+    end
+
+    for _, enemy in ipairs(self.enemies) do
+        if not enemy.is_dead then
+            if should_move_down then
+                enemy.y = enemy.y + enemy.height
+            else
+                enemy.x = enemy.x + self.move_step * self.move_direction
+            end
+            if enemy.current_frame == 1 then
+                enemy.current_frame = 2
+            else
+                enemy.current_frame = 1
+            end
         end
     end
 end
