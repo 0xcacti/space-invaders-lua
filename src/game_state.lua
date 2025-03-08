@@ -9,14 +9,18 @@ function GameState:new()
     self.player = Player()
     self.enemies = {}
 
-    self.red = Red(50, 100)
-    self.red2 = Red(50, 100)
     self.start_x = 50
     self.start_y = 100
+    self.xy_gap = 10
 
-    for i = 0, 10 do
-        local enemy = Red(self.start_x + i * 20, self.start_y)
-        print(enemy.x, enemy.y)
+    local enemy = Red(self.start_x, self.start_y)
+    table.insert(self.enemies, enemy)
+    local width = enemy.width
+    local height = enemy.height
+    local spacing = width + self.xy_gap
+
+    for i = 1, 10 do
+        local enemy = Red(self.start_x + i * spacing, self.start_y)
         table.insert(self.enemies, enemy)
     end
     self.player_bullets = {}
