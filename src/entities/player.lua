@@ -12,7 +12,6 @@ function Player:new()
     self.lives = 3
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
-    return self
 end
 
 function Player:update(dt)
@@ -32,7 +31,7 @@ function Player:update(dt)
 end
 
 function Player:keyPressed(key, list_of_bullets)
-    if key == "space" then
+    if key == "space" and #list_of_bullets == 0 then
         table.insert(list_of_bullets, StraightBullet(self.x + (self.width / 2), self.y, false))
     end
 end

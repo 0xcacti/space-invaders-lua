@@ -24,7 +24,7 @@ function Red:new(x, y)
         love.graphics.newQuad(self.image_width + 1, 0, self.image_width, self.image_height, self.image:getDimensions()))
 
     --  enemy atributes
-    self.speed = 1
+    self.speed = 100
     self.x = x
     self.y = y
     self.score = 10
