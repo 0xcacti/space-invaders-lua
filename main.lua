@@ -2,7 +2,7 @@ local state
 
 function love.load()
     local GameState = require("src.game_state")
-    state = GameState:new()
+    state = GameState()
 end
 
 function love.update(dt)

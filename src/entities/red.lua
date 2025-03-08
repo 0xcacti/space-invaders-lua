@@ -6,7 +6,7 @@ local ZigZagBullet = require("src.entities.bullets.zigzag")
 local Red = Object:extend()
 
 function Red:new(x, y)
-    local self = Red.super.new(self)
+    Red.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/redquad.png")
     self.image:setFilter("nearest", "nearest")
     self.frames = {}
@@ -31,9 +31,6 @@ function Red:new(x, y)
     self.current_frame = 1
     self.is_dead = false
     self.chance_to_shoot = 0.01
-
-
-    return self
 end
 
 function Red:chanceToShoot(enemy_bullets)

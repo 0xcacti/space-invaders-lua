@@ -6,11 +6,11 @@ local ScoreBoard = require("src.ui.score_board")
 
 function GameState:new()
     self.state = 'play'
-    self.player = Player:new()
+    self.player = Player()
     self.enemies = {}
 
-    self.red = Red:new(50, 100)
-    self.red2 = Red:new(50, 100)
+    self.red = Red(50, 100)
+    self.red2 = Red(50, 100)
     self.start_x = 50
     self.start_y = 100
 
@@ -69,8 +69,6 @@ end
 function GameState:draw()
     self.player:draw()
 
-    self.red:draw()
-    self.red2:draw()
     for _, enemy in ipairs(self.enemies) do
         if not enemy.is_dead then
             enemy:draw()
