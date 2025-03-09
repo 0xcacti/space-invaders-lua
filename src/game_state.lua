@@ -56,9 +56,6 @@ function GameState:new()
 
 
 
-
-
-
     self.player_bullets = {}
     self.enemy_bullets = {}
     self.score_board = ScoreBoard:new(20, 20)
