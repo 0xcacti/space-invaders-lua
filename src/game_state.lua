@@ -44,11 +44,17 @@ function GameState:new()
                 table.insert(self.enemies, l_enemy)
             end
         else
-            local enemy = Yellow(self.start_x, self.start_y)
+            local temp_enemy = Yellow(0, 0)
+            local yellow_width = temp_enemy.width
+            local center_offset = (width - yellow_width) / 4
+            local yellow_center_x = self.start_x + center_offset
+
+            local enemy = Yellow(yellow_center_x, self.start_y)
+            local enemy_width = enemy.width
             table.insert(self.enemies, enemy)
             for j = 1, 5 do
-                local r_enemy = Yellow(self.start_x + j * x_spacing, self.start_y)
-                local l_enemy = Yellow(self.start_x - j * x_spacing, self.start_y)
+                local r_enemy = Yellow(yellow_center_x + j * x_spacing, self.start_y)
+                local l_enemy = Yellow(yellow_center_x - j * x_spacing, self.start_y)
                 table.insert(self.enemies, r_enemy)
                 table.insert(self.enemies, l_enemy)
             end
