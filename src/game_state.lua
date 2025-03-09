@@ -2,6 +2,7 @@ local Object = require("lib.classic")
 local GameState = Object:extend()
 local Player = require("src.entities.player")
 local Red = require("src.entities.red")
+local Green = require("src.entities.green")
 local ScoreBoard = require("src.ui.score_board")
 
 function GameState:new()
@@ -23,7 +24,7 @@ function GameState:new()
     self.start_x = self.start_x - width
 
     for i = 1, 5 do
-        if i <= 2 then
+        if i >= 4 then
             local enemy = Red(self.start_x, self.start_y)
             table.insert(self.enemies, enemy)
             for j = 1, 5 do
@@ -32,12 +33,12 @@ function GameState:new()
                 table.insert(self.enemies, r_enemy)
                 table.insert(self.enemies, l_enemy)
             end
-        elseif i <= 4 then
-            local enemy = Red(self.start_x, self.start_y)
+        elseif i >= 2 then
+            local enemy = Green(self.start_x, self.start_y)
             table.insert(self.enemies, enemy)
             for j = 1, 5 do
-                local r_enemy = Red(self.start_x + j * x_spacing, self.start_y)
-                local l_enemy = Red(self.start_x - j * x_spacing, self.start_y)
+                local r_enemy = Green(self.start_x + j * x_spacing, self.start_y)
+                local l_enemy = Green(self.start_x - j * x_spacing, self.start_y)
                 table.insert(self.enemies, r_enemy)
                 table.insert(self.enemies, l_enemy)
             end
