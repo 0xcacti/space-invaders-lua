@@ -8,30 +8,66 @@ function GameState:new()
     self.state = 'play'
     self.player = Player()
     self.enemies = {}
-
-    self.start_x = 50
+    self.screen_width = love.graphics.getWidth() -- window cant be resized
+    self.start_x = self.screen_width / 2
     self.start_y = 100
-    self.xy_gap = 10
+    self.x_gap = 10
+    self.y_gap = 10
 
-    local enemy = Red(self.start_x, self.start_y)
-    table.insert(self.enemies, enemy)
-    local width = enemy.width
-    local height = enemy.height
-    local spacing = width + self.xy_gap
+    local temp_enemy = Red(self.start_x, self.start_y)
+    local width = temp_enemy.width
+    local height = temp_enemy.height
+    local x_spacing = width + self.x_gap
+    local y_spacing = height + self.y_gap
 
-    for i = 1, 10 do
-        local enemy = Red(self.start_x + i * spacing, self.start_y)
-        table.insert(self.enemies, enemy)
+    self.start_x = self.start_x - width
+
+    for i = 1, 5 do
+        if i <= 2 then
+            local enemy = Red(self.start_x, self.start_y)
+            table.insert(self.enemies, enemy)
+            for i = 1, 5 do
+                local r_enemy = Red(self.start_x + i * x_spacing, self.start_y)
+                local l_enemy = Red(self.start_x - i * x_spacing, self.start_y)
+                table.insert(self.enemies, r_enemy)
+                table.insert(self.enemies, l_enemy)
+            end
+        elseif i <= 4 then
+            local enemy = Red(self.start_x, self.start_y)
+            table.insert(self.enemies, enemy)
+            for i = 1, 5 do
+                local r_enemy = Red(self.start_x + i * x_spacing, self.start_y)
+                local l_enemy = Red(self.start_x - i * x_spacing, self.start_y)
+                table.insert(self.enemies, r_enemy)
+                table.insert(self.enemies, l_enemy)
+            end
+        else
+            local enemy = Red(self.start_x, self.start_y)
+            table.insert(self.enemies, enemy)
+            for i = 1, 5 do
+                local r_enemy = Red(self.start_x + i * x_spacing, self.start_y)
+                local l_enemy = Red(self.start_x - i * x_spacing, self.start_y)
+                table.insert(self.enemies, r_enemy)
+                table.insert(self.enemies, l_enemy)
+            end
+        end
+        self.start_y = self.start_y + y_spacing
     end
+
+
+
+
+
+
     self.player_bullets = {}
     self.enemy_bullets = {}
     self.score_board = ScoreBoard:new(20, 20)
     self.collision_manager = nil
 
     self.move_timer = 0
-    self.move_interval = 1
+    self.move_interval = 0.8
     self.move_direction = 1
-    self.move_step = width
+    self.move_step = width / 5
 end
 
 function GameState:update(dt)
@@ -60,12 +96,6 @@ function GameState:update(dt)
         end
     end
 
-    -- for _, enemy in ipairs(self.enemies) do
-    --     enemy:update(dt)
-    --     if not enemy.is_dead then
-    --         enemy:chanceToShoot(self.enemy_bullets)
-    --     end
-    -- end
 
     for i, bullet in ipairs(self.enemy_bullets) do
         bullet:update(dt)

@@ -1,6 +1,6 @@
 function love.conf(t)
     t.window.title = "Space Assailants"
-    t.window.width = 1080
+    t.window.width = 1000
     t.window.height = 720
-    t.window.resizable = true
+    t.window.resizable = false
 end
