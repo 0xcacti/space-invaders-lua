@@ -26,35 +26,33 @@ function GameState:new()
         if i <= 2 then
             local enemy = Red(self.start_x, self.start_y)
             table.insert(self.enemies, enemy)
-            for i = 1, 5 do
-                local r_enemy = Red(self.start_x + i * x_spacing, self.start_y)
-                local l_enemy = Red(self.start_x - i * x_spacing, self.start_y)
+            for j = 1, 5 do
+                local r_enemy = Red(self.start_x + j * x_spacing, self.start_y)
+                local l_enemy = Red(self.start_x - j * x_spacing, self.start_y)
                 table.insert(self.enemies, r_enemy)
                 table.insert(self.enemies, l_enemy)
             end
         elseif i <= 4 then
             local enemy = Red(self.start_x, self.start_y)
             table.insert(self.enemies, enemy)
-            for i = 1, 5 do
-                local r_enemy = Red(self.start_x + i * x_spacing, self.start_y)
-                local l_enemy = Red(self.start_x - i * x_spacing, self.start_y)
+            for j = 1, 5 do
+                local r_enemy = Red(self.start_x + j * x_spacing, self.start_y)
+                local l_enemy = Red(self.start_x - j * x_spacing, self.start_y)
                 table.insert(self.enemies, r_enemy)
                 table.insert(self.enemies, l_enemy)
             end
         else
             local enemy = Red(self.start_x, self.start_y)
             table.insert(self.enemies, enemy)
-            for i = 1, 5 do
-                local r_enemy = Red(self.start_x + i * x_spacing, self.start_y)
-                local l_enemy = Red(self.start_x - i * x_spacing, self.start_y)
+            for j = 1, 5 do
+                local r_enemy = Red(self.start_x + j * x_spacing, self.start_y)
+                local l_enemy = Red(self.start_x - j * x_spacing, self.start_y)
                 table.insert(self.enemies, r_enemy)
                 table.insert(self.enemies, l_enemy)
             end
         end
         self.start_y = self.start_y + y_spacing
     end
-
-
 
     self.player_bullets = {}
     self.enemy_bullets = {}
