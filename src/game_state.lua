@@ -10,6 +10,7 @@ function GameState:new()
     self.state = 'play'
     self.player = Player()
     self.enemies = {}
+    self.shooting_enemies = {}
     self.screen_width = love.graphics.getWidth()   -- window cant be resized
     self.screen_height = love.graphics.getHeight() -- window cant be resized
     self.end_height = 0.70 * self.screen_height
@@ -64,15 +65,17 @@ function GameState:new()
         self.start_y = self.start_y + y_spacing
     end
 
-    self.player_bullets = {}
-    self.enemy_bullets = {}
     self.score_board = ScoreBoard:new(20, 20)
-    self.collision_manager = nil
 
+    -- move rates
     self.move_timer = 0
     self.move_interval = 0.2
     self.move_direction = 1
     self.move_step = width / 5
+
+    -- enemy fire rates
+    self.player_bullets = {}
+    self.enemy_bullets = {}
 end
 
 function GameState:update(dt)
@@ -87,12 +90,18 @@ function GameState:update(dt)
     for i, bullet in ipairs(self.player_bullets) do
         bullet:update(dt)
         for _, enemy in ipairs(self.enemies) do
-            if not enemy.is_dead and bullet:checkCollision(enemy) then
-                if enemy:checkCollision(bullet) then
-                    self.score_board.score = self.score_board.score + enemy.score
-                    bullet.is_dead = true
-                    break
-                end
+            if not enemy.is_dead and enemy:checkCollision(bullet) then
+                self.score_board.score = self.score_board.score + enemy.score
+                bullet.is_dead = true
+                -- if enemy:is_a(Yellow) then
+                --     for j, e in ipairs(self.shooting_enemies) do
+                --         if e == enemy then
+                --             table.remove(self.shooting_enemies, j)
+                --             break
+                --         end
+                --     end
+                -- end
+                break
             end
         end
 
@@ -101,9 +110,16 @@ function GameState:update(dt)
         end
     end
 
+    if #self.enemy_bullets <= 3 then
+        local enemy = self.enemies[love.math.random(1, #self.shooting_enemies)]
+        enemy:shoot(self.enemy_bullets)
+    end
 
     for i, bullet in ipairs(self.enemy_bullets) do
         bullet:update(dt)
+        if bullet.is_dead then
+            table.remove(self.enemy_bullets, i)
+        end
         local hit = bullet:checkCollision(self.player)
         if hit then
             self.player:checkCollision(bullet)

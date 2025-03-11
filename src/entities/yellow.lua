@@ -33,8 +33,13 @@ function Yellow:new(x, y)
     self.chance_to_shoot = 0.01
 end
 
-function Yellow:chanceToShoot(enemy_bullets)
-    if love.math.random() < self.chance_to_shoot and not self.is_dead then
+function Yellow:shoot(enemy_bullets)
+    local shot_type = love.math.random(1, 3)
+    if shot_type == 1 then
+        table.insert(enemy_bullets, PlungerBullet(self.x, self.y, true))
+    elseif shot_type == 2 then
+        table.insert(enemy_bullets, SquigglyBullet(self.x, self.y, true))
+    else
         table.insert(enemy_bullets, ZigZagBullet(self.x, self.y, true))
     end
 end

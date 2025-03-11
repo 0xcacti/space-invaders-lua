@@ -30,13 +30,6 @@ function Red:new(x, y)
     self.score = 10
     self.current_frame = 1
     self.is_dead = false
-    self.chance_to_shoot = 0.01
-end
-
-function Red:chanceToShoot(enemy_bullets)
-    if love.math.random() < self.chance_to_shoot and not self.is_dead then
-        table.insert(enemy_bullets, ZigZagBullet(self.x, self.y, true))
-    end
 end
 
 function Red:update(dt)
