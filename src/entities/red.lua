@@ -1,8 +1,4 @@
 local Object = require("lib.classic")
-local StraightBullet = require("src.entities.bullets.straight")
-local PlungerBullet = require("src.entities.bullets.plunger")
-local SquigglyBullet = require("src.entities.bullets.squiggly")
-local ZigZagBullet = require("src.entities.bullets.zigzag")
 local Red = Object:extend()
 
 function Red:new(x, y)

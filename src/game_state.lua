@@ -6,8 +6,8 @@ local Green = require("src.entities.green")
 local Yellow = require("src.entities.yellow")
 local ScoreBoard = require("src.ui.score_board")
 
-function GameState:new()
-    self.state = 'play'
+function GameState:new(level, score)
+    self.mode = 'play'
     self.player = Player()
     self.enemies = {}
     self.shooting_enemies = {}
@@ -68,7 +68,8 @@ function GameState:new()
         self.start_y = self.start_y + y_spacing
     end
 
-    self.score_board = ScoreBoard:new(20, 20)
+    print(score)
+    self.score_board = ScoreBoard(20, 20, score)
 
     -- move rates
     self.move_timer = 0
@@ -82,6 +83,12 @@ function GameState:new()
 end
 
 function GameState:update(dt)
+    if self.state == 'gameover' then
+        return false
+    elseif self.state == 'win' then
+        return true
+    end
+
     self.player:update(dt)
 
     self.move_timer = self.move_timer + dt

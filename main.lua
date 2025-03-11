@@ -1,15 +1,40 @@
 local state
 
-function love.load()
+function love.load(args)
     local GameState = require("src.game_state")
-    state = GameState()
+    state = GameState(nil, 0)
+end
+
+function load_game_state()
+
 end
 
 function love.update(dt)
-    state:update(dt)
+    if state.mode == "paused" then
+        return
+    end
+    local res = state:update(dt)
+
+    if res then
+        if res == "gameover" then
+            current_level = 1
+        elseif res == "win" then
+            current_level = current_level + 1
+        end
+    end
 end
 
 function love.keypressed(key)
+    if key == "p" then
+        if state.mode == "paused" then
+            state.mode = "play"
+        else
+            state.mode = "paused"
+        end
+    end
+    if state.mode == "paused" then
+        return
+    end
     state:keypressed(key)
 end
 
