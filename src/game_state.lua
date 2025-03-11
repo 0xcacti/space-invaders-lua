@@ -68,7 +68,6 @@ function GameState:new(level, score)
         self.start_y = self.start_y + y_spacing
     end
 
-    print(score)
     self.score_board = ScoreBoard(20, 20, score)
 
     -- move rates
@@ -163,7 +162,6 @@ function GameState:move_enemies()
         if not enemy.is_dead then
             if should_move_down then
                 enemy.y = enemy.y + enemy.height
-                print(enemy.y)
             else
                 enemy.x = enemy.x + self.move_step * self.move_direction
             end

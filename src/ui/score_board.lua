@@ -13,9 +13,6 @@ function ScoreBoard:new(x, y, score)
     self.height = font:getHeight()
 end
 
-function ScoreBoard:update(dt)
-end
-
 function ScoreBoard:draw()
     love.graphics.print("Score: " .. self.score, self.font, self.x, self.y)
 end
