@@ -35,6 +35,7 @@ function love.keypressed(key)
     if state.mode == "paused" then
         return
     end
+
     state:keypressed(key)
 end
 
