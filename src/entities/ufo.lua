@@ -1,25 +1,15 @@
 local Object = require("lib.classic")
-local Red = Object:extend()
+local UFO = Object:extend()
 
-function Red:new(x, y)
-    Red.super.new(self)
-    self.image = love.graphics.newImage("assets/sprites/redquad.png")
+function UFO:new(x, y)
+    UFO.super.new(self)
+    self.image = love.graphics.newImage("assets/sprites/ufo.png")
     self.image:setFilter("nearest", "nearest")
-    self.frames = {}
-
-    -- logical size
     self.scale = 4
-    self.image_width = 12
-    self.image_height = 8
-    self.width = self.image_width * self.scale
-    self.height = self.image_height * self.scale
+    self.width = self.image:getWidth() * self.scale
+    self.height = self.image:getHeight() * self.scale
 
-    table.insert(self.frames,
-        love.graphics.newQuad(0, 0, self.image_width, self.image_height, self.image:getDimensions()))
-    table.insert(self.frames,
-        love.graphics.newQuad(self.image_width + 1, 0, self.image_width, self.image_height, self.image:getDimensions()))
-
-    --  enemy atributes
+    self.speed = 400
     self.x = x
     self.y = y
     self.score = 10
@@ -27,7 +17,7 @@ function Red:new(x, y)
     self.is_dead = false
 end
 
-function Red:update(dt)
+function UFO:update(dt)
     local window_width = love.graphics.getWidth()
 
     self.x = self.x + self.speed * dt
@@ -47,7 +37,7 @@ function Red:update(dt)
     end
 end
 
-function Red:checkCollision(obj)
+function UFO:checkCollision(obj)
     local self_left = self.x
     local self_right = self.x + self.width
     local self_top = self.y
@@ -69,9 +59,9 @@ function Red:checkCollision(obj)
     return false
 end
 
-function Red:draw()
-    love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y, 0, self.scale, self
+function UFO:draw()
+    love.graphics.draw(self.image, self.x, self.y, 0, self.scale, self
         .scale)
 end
 
-return Red
+return UFO

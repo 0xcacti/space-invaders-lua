@@ -12,7 +12,6 @@ function Bullet:new(x, y, is_enemy)
         self.speed = 700
     end
     self.is_dead = false
-    return self
 end
 
 return Bullet

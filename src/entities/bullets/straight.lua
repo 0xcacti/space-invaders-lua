@@ -8,7 +8,6 @@ function StraightBullet:new(x, y, is_enemy)
     self.scale = 4
     self.width = self.image:getWidth() * self.scale
     self.height = self.image:getHeight() * self.scale
-    return self
 end
 
 function StraightBullet:update(dt)

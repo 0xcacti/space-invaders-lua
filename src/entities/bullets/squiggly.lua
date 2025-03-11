@@ -29,7 +29,6 @@ function SquigglyBullet:new(x, y, is_enemy)
     self.height = 7 * self.scale
     self.visual_width = 3 * self.scale
     self.visual_height = 7 * self.scale
-    return self
 end
 
 function SquigglyBullet:update(dt)

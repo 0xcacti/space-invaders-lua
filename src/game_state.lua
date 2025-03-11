@@ -94,7 +94,7 @@ function GameState:update(dt)
     self.move_timer = self.move_timer + dt
     if self.move_timer >= self.move_interval then
         self.move_timer = 0
-        self:moveEnemies()
+        self:move_enemies()
     end
 
     for i, bullet in ipairs(self.player_bullets) do
@@ -147,7 +147,7 @@ function GameState:update(dt)
     end
 end
 
-function GameState:moveEnemies()
+function GameState:move_enemies()
     local window_width = love.graphics.getWidth()
     local should_move_down = false
     for _, enemy in ipairs(self.enemies) do
