@@ -36,7 +36,7 @@ end
 function Yellow:shoot(enemy_bullets)
     local shot_type = love.math.random(1, 3)
     if shot_type == 1 then
-        table.insert(enemy_bullets, PlungerBullet(self.x, self.y, true))
+        table.insert(enemy_bullets, PlungerBullet(self.x + (self.width / 2), self.y, true))
     elseif shot_type == 2 then
         table.insert(enemy_bullets, SquigglyBullet(self.x, self.y, true))
     else

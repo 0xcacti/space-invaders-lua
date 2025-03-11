@@ -48,7 +48,7 @@ function ZigZagBullet:update(dt)
 
         if self.current_frame == 1 then
             self.current_frame = 2
-            self.animation_direction = 1 -- reset direction for forward motion
+            self.animation_direction = 1
         elseif self.current_frame == 2 then
             if self.animation_direction == 1 then
                 self.current_frame = 3

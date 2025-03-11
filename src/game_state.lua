@@ -55,11 +55,14 @@ function GameState:new()
 
             local enemy = Yellow(yellow_center_x, self.start_y)
             table.insert(self.enemies, enemy)
+            table.insert(self.shooting_enemies, enemy)
             for j = 1, 5 do
                 local r_enemy = Yellow(yellow_center_x + j * x_spacing, self.start_y)
                 local l_enemy = Yellow(yellow_center_x - j * x_spacing, self.start_y)
                 table.insert(self.enemies, r_enemy)
                 table.insert(self.enemies, l_enemy)
+                table.insert(self.shooting_enemies, r_enemy)
+                table.insert(self.shooting_enemies, l_enemy)
             end
         end
         self.start_y = self.start_y + y_spacing
@@ -93,14 +96,14 @@ function GameState:update(dt)
             if not enemy.is_dead and enemy:checkCollision(bullet) then
                 self.score_board.score = self.score_board.score + enemy.score
                 bullet.is_dead = true
-                -- if enemy:is_a(Yellow) then
-                --     for j, e in ipairs(self.shooting_enemies) do
-                --         if e == enemy then
-                --             table.remove(self.shooting_enemies, j)
-                --             break
-                --         end
-                --     end
-                -- end
+                if enemy:is(Yellow) then
+                    for j, e in ipairs(self.shooting_enemies) do
+                        if e == enemy then
+                            table.remove(self.shooting_enemies, j)
+                            break
+                        end
+                    end
+                end
                 break
             end
         end
@@ -110,9 +113,18 @@ function GameState:update(dt)
         end
     end
 
-    if #self.enemy_bullets <= 3 then
-        local enemy = self.enemies[love.math.random(1, #self.shooting_enemies)]
-        enemy:shoot(self.enemy_bullets)
+    if #self.enemy_bullets < 3 and #self.shooting_enemies > 0 and love.math.random() < 0.005 then
+        local alive_shooters = {}
+        for _, enemy in ipairs(self.shooting_enemies) do
+            if not enemy.is_dead then
+                table.insert(alive_shooters, enemy)
+            end
+        end
+        if #alive_shooters > 0 then
+            local shooter_idx = love.math.random(1, #alive_shooters)
+            local shooter = alive_shooters[shooter_idx]
+            shooter:shoot(self.enemy_bullets)
+        end
     end
 
     for i, bullet in ipairs(self.enemy_bullets) do
