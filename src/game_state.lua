@@ -5,6 +5,7 @@ local Red = require("src.entities.red")
 local Green = require("src.entities.green")
 local Yellow = require("src.entities.yellow")
 local ScoreBoard = require("src.ui.score_board")
+local Ground = require("src.ui.ground")
 
 function GameState:new(level, score)
     self.mode = 'play'
@@ -14,6 +15,7 @@ function GameState:new(level, score)
     self.screen_width = love.graphics.getWidth()   -- window cant be resized
     self.screen_height = love.graphics.getHeight() -- window cant be resized
     self.end_height = 0.70 * self.screen_height
+    self.ground_height = 0.90 * self.screen_height
 
     self.start_x = self.screen_width / 2
     self.start_y = 100
@@ -69,6 +71,7 @@ function GameState:new(level, score)
     end
 
     self.score_board = ScoreBoard(20, 20, score)
+    self.ground = Ground(0, self.screen_width, self.ground_height)
 
     -- move rates
     self.move_timer = 0
@@ -191,6 +194,7 @@ function GameState:draw()
         end
     end
 
+    self.ground:draw()
     self.score_board:draw()
 
     for _, bullet in ipairs(self.player_bullets) do
@@ -198,7 +202,9 @@ function GameState:draw()
     end
 
     for _, bullet in ipairs(self.enemy_bullets) do
-        bullet:draw()
+        if bullet.y + bullet.height < self.ground_height then
+            bullet:draw()
+        end
     end
 end
 
