@@ -1,7 +1,11 @@
 local state
 
 function love.load(args)
-    local GameState = require("src.game_state")
+    -- local GameState = require("src.game_state")
+    -- music = love.audio.newSource("assets/music/spaceinvaders2.ogg", "stream")
+    -- music:setLooping(true)
+    -- music:setVolume(0.5)
+    -- music:play()
     state = GameState(nil, 0)
 end
 

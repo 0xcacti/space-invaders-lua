@@ -5,6 +5,9 @@ local Player = Object:extend()
 function Player:new()
     Player.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/player.png")
+    self.shoot_sound = love.audio.newSource("assets/sfx/fastinvader.wav", "static")
+    self.shoot_sound:setVolume(0.1)
+    self.shoot_sound:setPitch(1.5)
     self.height = 30
     self.speed = 200
     self.x = 800
@@ -32,6 +35,7 @@ end
 
 function Player:keyPressed(key, list_of_bullets)
     if key == "space" and #list_of_bullets == 0 then
+        self.shoot_sound:play()
         table.insert(list_of_bullets, StraightBullet(self.x + (self.width / 2), self.y, false))
     end
 end
