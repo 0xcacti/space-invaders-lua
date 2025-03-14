@@ -8,6 +8,7 @@ local ScoreBoard = require("src.ui.score_board")
 local Ground = require("src.ui.ground")
 
 function GameState:new(level, score)
+    assert(level, "GameState requires a non-nil level parameter")
     self.mode = 'play'
     self.player = Player()
     self.enemies = {}
@@ -18,7 +19,8 @@ function GameState:new(level, score)
     self.ground_height = 0.90 * self.screen_height
 
     self.start_x = self.screen_width / 2
-    self.start_y = 100
+    self.start_y = level.start_y or 50
+
     self.x_gap = 10
     self.y_gap = 10
 

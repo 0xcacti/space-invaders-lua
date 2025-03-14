@@ -1,24 +1,12 @@
+local state_manager
 local state
 
 function love.load(args)
+    local StateManager = require("src.state_manager")
     local GameState = require("src.game_state")
 
-    invaderSounds = {
-        love.audio.newSource("assets/sfx/fastinvader1.wav", "static"),
-        love.audio.newSource("assets/sfx/fastinvader2.wav", "static"),
-        love.audio.newSource("assets/sfx/fastinvader3.wav", "static"),
-        love.audio.newSource("assets/sfx/fastinvader4.wav", "static"),
-    }
+    state_manager = StateManager()
 
-    for _, sound in ipairs(invaderSounds) do
-        sound:setVolume(0.5)
-    end
-
-
-    -- Sound effect timing variables
-    currentInvaderSound = 1
-    invaderSoundTimer = 0
-    invaderSoundInterval = 0.5
 
     state = GameState(nil, 0)
 end
@@ -39,20 +27,6 @@ function love.update(dt)
         elseif res == "win" then
             current_level = current_level + 1
         end
-    end
-
-    invaderSoundTimer = invaderSoundTimer + dt
-    if invaderSoundTimer >= invaderSoundInterval then
-        invaderSoundTimer = 0
-
-        -- Stop all sounds first
-        for _, sound in ipairs(invaderSounds) do
-            sound:stop()
-        end
-
-        -- Then play the current one
-        invaderSounds[currentInvaderSound]:play()
-        currentInvaderSound = currentInvaderSound % #invaderSounds + 1
     end
 end
 

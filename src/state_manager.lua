@@ -3,7 +3,7 @@ local StateManager = Object:extend()
 local GameState = require("src.game_state")
 
 local levels = {
-
+    start_y = 50,
 }
 
 function StateManager:new(state)
