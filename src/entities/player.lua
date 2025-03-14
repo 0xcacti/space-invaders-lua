@@ -5,7 +5,7 @@ local Player = Object:extend()
 function Player:new()
     Player.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/player.png")
-    self.shoot_sound = love.audio.newSource("assets/sfx/fastinvader.wav", "static")
+    self.shoot_sound = love.audio.newSource("assets/sfx/shoot.wav", "static")
     self.shoot_sound:setVolume(0.1)
     self.shoot_sound:setPitch(1.5)
     self.height = 30
