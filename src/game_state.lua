@@ -88,9 +88,9 @@ end
 
 function GameState:update(dt)
     if self.state == 'gameover' then
-        return false
+        return false, self.score_board.score
     elseif self.state == 'win' then
-        return true
+        return true, self.score_board.score
     end
 
     self.player:update(dt)
@@ -148,6 +148,10 @@ function GameState:update(dt)
             self.player:checkCollision(bullet)
             table.remove(self.enemy_bullets, i)
         end
+    end
+
+    if #self.enemies == 0 then 
+        self.state = 'win'
     end
 end
 
