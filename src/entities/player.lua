@@ -13,6 +13,7 @@ function Player:new()
     self.x = 800
     self.y = 600
     self.lives = 3
+    self.is_dead = false
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
     self.shot_count = 0
@@ -59,7 +60,7 @@ function Player:checkCollision(obj)
         self_top < obj_bottom then
         self.lives = self.lives - 1
         if self.lives == 0 then
-            love.load()
+            self.is_dead = true
         end
         return true
     end

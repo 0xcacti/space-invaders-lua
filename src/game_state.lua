@@ -98,16 +98,7 @@ function GameState:new(level, score, callbacks)
 end
 
 function GameState:update(dt)
-    if self.state == 'gameover' and not self.state_change_triggered then
-        self.state_change_triggered = true
-        self.callbacks.on_game_over()
-        return
-    elseif self.state == 'win' and not self.state_change_triggered then
-        self.state_change_triggered = true
-        self.callbacks.on_win()
-        return
-    end
-
+    self:check_state()
     self.player:update(dt)
 
     if #self.ufos == 0 and love.math.random() < self.ufo_chance then
@@ -118,11 +109,9 @@ function GameState:update(dt)
         local ufo = UFO(direction)
         table.insert(self.ufos, ufo)
     end
-    print("num of ufos: " .. #self.ufos)
     for _, ufo in ipairs(self.ufos) do
         ufo:update(dt)
     end
-
 
     self.move_timer = self.move_timer + dt
     if self.move_timer >= self.move_interval then
@@ -135,6 +124,8 @@ function GameState:update(dt)
         for _, enemy in ipairs(self.enemies) do
             if not enemy.is_dead and enemy:checkCollision(bullet) then
                 self.score_board.score = self.score_board.score + enemy.score
+                self.callbacks.on_score(enemy.score)
+
                 bullet.is_dead = true
                 if enemy:is(Yellow) then
                     for j, e in ipairs(self.shooting_enemies) do
@@ -148,19 +139,21 @@ function GameState:update(dt)
             end
         end
 
-        for i, ufo in ipairs(self.ufos) do
+        for _, ufo in ipairs(self.ufos) do
             if ufo:checkCollision(bullet) then
-                self.score_board.score = self.score_board.score + ufo:score(self.player.shot_count)
+                local score = ufo:score(self.player.shot_count)
+                self.score_board.score = self.score_board.score + score
+                self.callbacks.on_score(score)
                 bullet.is_dead = true
                 break
             end
         end
 
+
         if bullet.is_dead then
             table.remove(self.player_bullets, i)
         end
     end
-
     if #self.enemy_bullets < 3 and #self.shooting_enemies > 0 and love.math.random() < 0.005 then
         local alive_shooters = {}
         for _, enemy in ipairs(self.shooting_enemies) do
@@ -187,21 +180,53 @@ function GameState:update(dt)
         end
     end
 
-    for i, ufo in ipairs(self.ufos) do 
-        if ufo.is_dead then 
+    for i, ufo in ipairs(self.ufos) do
+        if ufo.is_dead then
             ufo.sound:stop()
             table.remove(self.ufos, i)
         end
     end
 
+    if self.player.is_dead then 
+        self.state = 'gameover'
+    end
+
+end
+
+function GameState:check_state()
     if all_dead(self.enemies) then
         self.state = 'win'
     end
+
+    if self.state == 'gameover' and not self.state_change_triggered then
+        self.state_change_triggered = true
+        self:cleanup()
+        self.callbacks.on_game_over()
+        return
+    elseif self.state == 'win' and not self.state_change_triggered then
+        self.state_change_triggered = true
+        self:cleanup()
+        self.callbacks.on_win()
+        return
+    end
+    collectgarbage("collect")
+end
+
+function GameState:cleanup()
+    for _, ufo in ipairs(self.ufos) do
+        ufo.sound:stop()
+    end
+    self.enemies = {}
+    self.shooting_enemies = {}
+    self.ufos = {}
+    self.player_bullets = {}
+    self.enemy_bullets = {}
 end
 
 function GameState:move_enemies()
     local window_width = love.graphics.getWidth()
     local should_move_down = false
+
     for _, enemy in ipairs(self.enemies) do
         local next_x = enemy.x + self.move_step * self.move_direction
         if next_x < 0 or next_x + enemy.width > window_width then
@@ -224,8 +249,7 @@ function GameState:move_enemies()
                 enemy.current_frame = 1
             end
             if enemy.y + enemy.height >= self.end_height then
-                -- TODO end game
-                love.load()
+                self.state = 'gameover'
             end
         end
     end

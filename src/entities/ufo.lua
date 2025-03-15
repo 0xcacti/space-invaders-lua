@@ -25,10 +25,9 @@ end
 
 function UFO:update(dt)
     local window_width = love.graphics.getWidth()
-    if not self.sound:isPlaying() and not self.is_dead then 
+    if not self.sound:isPlaying() and not self.is_dead then
         self.sound:play()
     end
-
 
     self.x = self.x + self.direction * self.speed * dt
     if self.x + self.width < 0 then

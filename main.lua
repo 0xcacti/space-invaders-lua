@@ -16,7 +16,6 @@ function love.update(dt)
         if res == "gameover" then
             current_level = 1
         elseif res == "win" then
-            print("did we ever get here?")
             state_manager.level_idx = state_manager.level_idx + 1
             state_manager:load_game_state(state_manager.level_idx, score)
         end
