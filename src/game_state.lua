@@ -6,6 +6,7 @@ local Green = require("src.entities.green")
 local Yellow = require("src.entities.yellow")
 local ScoreBoard = require("src.ui.score_board")
 local Ground = require("src.ui.ground")
+require("src.utils")
 
 function GameState:new(level, score)
     assert(level, "GameState requires a non-nil level parameter")
@@ -88,9 +89,9 @@ end
 
 function GameState:update(dt)
     if self.state == 'gameover' then
-        return false, self.score_board.score
+        return 'gameover', self.score_board.score
     elseif self.state == 'win' then
-        return true, self.score_board.score
+        return 'win', self.score_board.score
     end
 
     self.player:update(dt)
@@ -150,7 +151,8 @@ function GameState:update(dt)
         end
     end
 
-    if #self.enemies == 0 then 
+    if all_dead(self.enemies) then
+        print("entered all dead")
         self.state = 'win'
     end
 end

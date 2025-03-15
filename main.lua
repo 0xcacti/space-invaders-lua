@@ -1,13 +1,8 @@
 local state_manager
 
-function love.load(args)
+function love.load()
     local StateManager = require("src.state_manager")
-
     state_manager = StateManager()
-end
-
-function load_game_state()
-
 end
 
 function love.update(dt)
@@ -21,6 +16,7 @@ function love.update(dt)
         if res == "gameover" then
             current_level = 1
         elseif res == "win" then
+            print("did we ever get here?")
             state_manager.level_idx = state_manager.level_idx + 1
             state_manager:load_game_state(state_manager.level_idx, score)
         end
