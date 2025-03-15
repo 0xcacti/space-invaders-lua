@@ -285,9 +285,7 @@ function GameState:draw()
     self.player:draw()
 
     for _, enemy in ipairs(self.enemies) do
-        if not enemy.is_dead then
-            enemy:draw()
-        end
+        enemy:draw()
     end
 
     for _, ufo in ipairs(self.ufos) do

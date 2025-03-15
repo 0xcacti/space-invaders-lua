@@ -51,8 +51,13 @@ function Red:checkCollision(obj)
 end
 
 function Red:draw()
-    love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y, 0, self.scale, self
-        .scale)
+    if not self.is_dead then
+        love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y, 0, self.scale, self
+            .scale)
+    else 
+        love.graphics.draw(self.death_image, self.x, self.y, 0, self.scale, self.scale)
+        
+    end
 end
 
 return Red
