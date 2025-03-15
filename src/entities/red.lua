@@ -27,26 +27,6 @@ function Red:new(x, y)
     self.is_dead = false
 end
 
-function Red:update(dt)
-    local window_width = love.graphics.getWidth()
-
-    self.x = self.x + self.speed * dt
-    if self.x < 0 then
-        self.x = 0
-        self.speed = -self.speed
-        self.y = self.y + self.height
-    elseif self.x + self.width > window_width then
-        self.x = window_width - self.width
-        self.speed = -self.speed
-        self.y = self.y + self.height
-    end
-
-    self.current_frame = self.current_frame + dt
-    if self.current_frame >= #self.frames + 1 then
-        self.current_frame = 1
-    end
-end
-
 function Red:checkCollision(obj)
     local self_left = self.x
     local self_right = self.x + self.width
@@ -74,4 +54,47 @@ function Red:draw()
         .scale)
 end
 
-return Red
+return Redlocal state_manager
+
+function love.load()
+    local StateManager = require("src.state_manager")
+    state_manager = StateManager()
+end
+
+function love.update(dt)
+    if state_manager.state.mode == "paused" then
+        return
+    end
+
+    local res, score = state_manager.state:update(dt)
+
+    if res then
+        if res == "gameover" then
+            current_level = 1
+        elseif res == "win" then
+            print("did we ever get here?")
+            state_manager.level_idx = state_manager.level_idx + 1
+            state_manager:load_game_state(state_manager.level_idx, score)
+        end
+    end
+end
+
+function love.keypressed(key)
+    if key == "p" then
+        if state_manager.state.mode == "paused" then
+            state_manager.state.mode = "play"
+        else
+            state_manager.state.mode = "paused"
+        end
+    end
+    if state_manager.state.mode == "paused" then
+        return
+    end
+
+    state_manager.state:keypressed(key)
+end
+
+function love.draw()
+    state_manager.state:draw()
+end
+

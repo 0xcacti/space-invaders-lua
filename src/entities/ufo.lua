@@ -1,7 +1,7 @@
 local Object = require("lib.classic")
 local UFO = Object:extend()
 
-function UFO:new(x, y)
+function UFO:new(x, y, direction)
     UFO.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/ufo.png")
     self.image:setFilter("nearest", "nearest")
@@ -12,28 +12,33 @@ function UFO:new(x, y)
     self.speed = 400
     self.x = x
     self.y = y
-    self.score = 10
-    self.current_frame = 1
+    self.direction = direction
     self.is_dead = false
 end
 
 function UFO:update(dt)
     local window_width = love.graphics.getWidth()
 
-    self.x = self.x + self.speed * dt
-    if self.x < 0 then
-        self.x = 0
-        self.speed = -self.speed
-        self.y = self.y + self.height
+    self.x = self.x + self.direction * self.speed * dt
+    if self.x + self.width < 0 then
+        self.is_dead = true
     elseif self.x + self.width > window_width then
         self.x = window_width - self.width
         self.speed = -self.speed
         self.y = self.y + self.height
     end
+end
 
-    self.current_frame = self.current_frame + dt
-    if self.current_frame >= #self.frames + 1 then
-        self.current_frame = 1
+function UFO:score(shots_fired)
+    local last_digit = shots_fired % 10
+    if last_digit == 0 or last_digit == 5 then
+        return 300
+    elseif last_digit == 1 or last_digit == 6 or last_digit == 9 then
+        return 100
+    elseif last_digit == 2 or last_digit == 4 or last_digit == 7 then
+        return 50
+    elseif last_digit == 3 or last_digit == 8 then
+        return 150
     end
 end
 

@@ -4,23 +4,33 @@ local Player = require("src.entities.player")
 local Red = require("src.entities.red")
 local Green = require("src.entities.green")
 local Yellow = require("src.entities.yellow")
+local UFO = require("src.entities.ufo")
 local ScoreBoard = require("src.ui.score_board")
 local Ground = require("src.ui.ground")
 require("src.utils")
 
-function GameState:new(level, score)
+function GameState:new(level, score, callbacks)
     assert(level, "GameState requires a non-nil level parameter")
+    assert(score, "GameState requires a non-nil score parameter")
+    assert(callbacks, "GameState requires a non-nil callbacks parameter")
     self.mode = 'play'
+    self.callbacks = callbacks
+
     self.player = Player()
     self.enemies = {}
     self.shooting_enemies = {}
+
+    -- ufo setup
+    self.ufo_chance = level.ufo_chance
+    self.ufos = {}
+
     self.screen_width = love.graphics.getWidth()   -- window cant be resized
     self.screen_height = love.graphics.getHeight() -- window cant be resized
     self.end_height = 0.70 * self.screen_height
     self.ground_height = 0.90 * self.screen_height
 
     self.start_x = self.screen_width / 2
-    self.start_y = level.start_y or 50
+    self.start_y = level.start_y
 
     self.x_gap = 10
     self.y_gap = 10
@@ -88,13 +98,21 @@ function GameState:new(level, score)
 end
 
 function GameState:update(dt)
-    if self.state == 'gameover' then
-        return 'gameover', self.score_board.score
-    elseif self.state == 'win' then
-        return 'win', self.score_board.score
+    if self.state == 'gameover' and not self.state_change_triggered then
+        self.state_change_triggered = true
+        self.callbacks.on_game_over()
+        return
+    elseif self.state == 'win' and not self.state_change_triggered then
+        self.state_change_triggered = true
+        self.callbacks.on_win()
+        return
     end
 
     self.player:update(dt)
+
+    if #self.ufos == 0 and love.math.random() < self.ufo_chance then
+        local ufo = UFO(10, 0)
+    end
 
     self.move_timer = self.move_timer + dt
     if self.move_timer >= self.move_interval then
@@ -116,6 +134,14 @@ function GameState:update(dt)
                         end
                     end
                 end
+                break
+            end
+        end
+
+        for _, ufo in ipairs(self.ufos) do
+            if ufo:checkCollision(bullet) then
+                self.score_board.score = self.score_board.score + ufo:score(self.player.shot_count)
+                bullet.is_dead = true
                 break
             end
         end
@@ -152,7 +178,6 @@ function GameState:update(dt)
     end
 
     if all_dead(self.enemies) then
-        print("entered all dead")
         self.state = 'win'
     end
 end
@@ -200,6 +225,10 @@ function GameState:draw()
         if not enemy.is_dead then
             enemy:draw()
         end
+    end
+
+    for _, ufo in ipairs(self.ufos) do
+        ufo:draw()
     end
 
     self.ground:draw()

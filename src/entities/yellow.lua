@@ -1,5 +1,4 @@
 local Object = require("lib.classic")
-local StraightBullet = require("src.entities.bullets.straight")
 local PlungerBullet = require("src.entities.bullets.plunger")
 local SquigglyBullet = require("src.entities.bullets.squiggly")
 local ZigZagBullet = require("src.entities.bullets.zigzag")
@@ -41,26 +40,6 @@ function Yellow:shoot(enemy_bullets)
         table.insert(enemy_bullets, SquigglyBullet(self.x, self.y, true))
     else
         table.insert(enemy_bullets, ZigZagBullet(self.x, self.y, true))
-    end
-end
-
-function Yellow:update(dt)
-    local window_width = love.graphics.getWidth()
-
-    self.x = self.x + self.speed * dt
-    if self.x < 0 then
-        self.x = 0
-        self.speed = -self.speed
-        self.y = self.y + self.height
-    elseif self.x + self.width > window_width then
-        self.x = window_width - self.width
-        self.speed = -self.speed
-        self.y = self.y + self.height
-    end
-
-    self.current_frame = self.current_frame + dt
-    if self.current_frame >= #self.frames + 1 then
-        self.current_frame = 1
     end
 end
 

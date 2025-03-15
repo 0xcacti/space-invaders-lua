@@ -15,6 +15,7 @@ function Player:new()
     self.lives = 3
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
+    self.shot_count = 0
 end
 
 function Player:update(dt)
@@ -36,6 +37,7 @@ end
 function Player:keyPressed(key, list_of_bullets)
     if key == "space" and #list_of_bullets <= 100 then
         self.shoot_sound:play()
+        self.shot_count = self.shot_count + 1
         table.insert(list_of_bullets, StraightBullet(self.x + (self.width / 2), self.y, false))
     end
 end
