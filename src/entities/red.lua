@@ -4,6 +4,7 @@ local Red = Object:extend()
 function Red:new(x, y)
     Red.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/redquad.png")
+    self.death_image = love.graphics.newImage("assets/sprites/enemy-death.png")
     self.image:setFilter("nearest", "nearest")
     self.frames = {}
 

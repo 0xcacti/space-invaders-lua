@@ -7,7 +7,7 @@ function ScoreBoard:new(x, y, score)
     self.max_score = 999999
     self.x = x
     self.y = y
-    local font = love.graphics.newFont(20)
+    local font = love.graphics.newFont("assets/font/pixel-invaders.ttf", 64)
     self.font = font
     self.width = font:getWidth("Score: 999999")
     self.height = font:getHeight()
