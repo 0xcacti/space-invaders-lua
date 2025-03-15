@@ -13,6 +13,7 @@ function GameState:new(level, score, callbacks)
     assert(level, "GameState requires a non-nil level parameter")
     assert(score, "GameState requires a non-nil score parameter")
     assert(callbacks, "GameState requires a non-nil callbacks parameter")
+
     self.mode = 'play'
     self.callbacks = callbacks
 
@@ -176,10 +177,9 @@ function GameState:check_player_bullets(dt)
             table.remove(self.player_bullets, i)
         end
     end
-
 end
 
-function GameState:enemy_fire() 
+function GameState:enemy_fire()
     if #self.enemy_bullets < 3 and #self.shooting_enemies > 0 and love.math.random() < 0.005 then
         local alive_shooters = {}
         for _, enemy in ipairs(self.shooting_enemies) do
@@ -193,7 +193,6 @@ function GameState:enemy_fire()
             shooter:shoot(self.enemy_bullets)
         end
     end
-
 end
 
 function GameState:check_enemy_bullets(dt)
@@ -246,15 +245,16 @@ function GameState:cleanup()
 end
 
 function GameState:move_enemies()
-    local window_width = love.graphics.getWidth()
     local should_move_down = false
 
     for _, enemy in ipairs(self.enemies) do
-        local next_x = enemy.x + self.move_step * self.move_direction
-        if next_x < 0 or next_x + enemy.width > window_width then
-            should_move_down = true
-            self.move_direction = -self.move_direction
-            break
+        if not enemy.is_dead then
+            local next_x = enemy.x + self.move_step * self.move_direction
+            if next_x < 0 or next_x + enemy.width > self.screen_width then
+                should_move_down = true
+                self.move_direction = -self.move_direction
+                break
+            end
         end
     end
 
