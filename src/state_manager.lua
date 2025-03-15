@@ -23,8 +23,8 @@ end
 function StateManager:create_game_state()
     local callbacks = {
         on_score = function(points) self.score = self.score + points end,
-        on_win = function() self:win() end,
-        on_game_over = function() self:game_over() end,
+        on_win = function() self:on_win() end,
+        on_game_over = function() self:on_game_over() end,
     }
 
     self.state = GameState(levels[self.level_idx], self.score, callbacks)

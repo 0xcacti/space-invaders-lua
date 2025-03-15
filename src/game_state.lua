@@ -111,8 +111,18 @@ function GameState:update(dt)
     self.player:update(dt)
 
     if #self.ufos == 0 and love.math.random() < self.ufo_chance then
-        local ufo = UFO(10, 0)
+        local direction = love.math.random(0, 1)
+        if direction == 0 then
+            direction = -1
+        end
+        local ufo = UFO(direction)
+        table.insert(self.ufos, ufo)
     end
+    print("num of ufos: " .. #self.ufos)
+    for _, ufo in ipairs(self.ufos) do
+        ufo:update(dt)
+    end
+
 
     self.move_timer = self.move_timer + dt
     if self.move_timer >= self.move_interval then
@@ -138,7 +148,7 @@ function GameState:update(dt)
             end
         end
 
-        for _, ufo in ipairs(self.ufos) do
+        for i, ufo in ipairs(self.ufos) do
             if ufo:checkCollision(bullet) then
                 self.score_board.score = self.score_board.score + ufo:score(self.player.shot_count)
                 bullet.is_dead = true
@@ -174,6 +184,13 @@ function GameState:update(dt)
         if hit then
             self.player:checkCollision(bullet)
             table.remove(self.enemy_bullets, i)
+        end
+    end
+
+    for i, ufo in ipairs(self.ufos) do 
+        if ufo.is_dead then 
+            ufo.sound:stop()
+            table.remove(self.ufos, i)
         end
     end
 
