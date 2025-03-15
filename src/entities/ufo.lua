@@ -19,7 +19,7 @@ function UFO:new(direction)
     else
         self.x = love.graphics.getWidth()
     end
-    self.y = 20
+    self.y = 60
     self.is_dead = false
 end
 
