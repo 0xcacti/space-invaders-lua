@@ -101,14 +101,7 @@ function GameState:update(dt)
     self:check_state()
     self.player:update(dt)
 
-    if #self.ufos == 0 and love.math.random() < self.ufo_chance then
-        local direction = love.math.random(0, 1)
-        if direction == 0 then
-            direction = -1
-        end
-        local ufo = UFO(direction)
-        table.insert(self.ufos, ufo)
-    end
+    self:should_ufo()
     for _, ufo in ipairs(self.ufos) do
         ufo:update(dt)
     end
@@ -119,6 +112,36 @@ function GameState:update(dt)
         self:move_enemies()
     end
 
+    self:check_player_bullets(dt)
+    self:enemy_fire()
+    self:check_enemy_bullets(dt)
+    self:check_ufo()
+
+    if self.player.is_dead then
+        self.state = 'gameover'
+    end
+end
+
+function GameState:check_state()
+    if all_dead(self.enemies) then
+        self.state = 'win'
+    end
+
+    if self.state == 'gameover' and not self.state_change_triggered then
+        self.state_change_triggered = true
+        self:cleanup()
+        self.callbacks.on_game_over()
+        return
+    elseif self.state == 'win' and not self.state_change_triggered then
+        self.state_change_triggered = true
+        self:cleanup()
+        self.callbacks.on_win()
+        return
+    end
+    collectgarbage("collect")
+end
+
+function GameState:check_player_bullets(dt)
     for i, bullet in ipairs(self.player_bullets) do
         bullet:update(dt)
         for _, enemy in ipairs(self.enemies) do
@@ -149,11 +172,14 @@ function GameState:update(dt)
             end
         end
 
-
         if bullet.is_dead then
             table.remove(self.player_bullets, i)
         end
     end
+
+end
+
+function GameState:enemy_fire() 
     if #self.enemy_bullets < 3 and #self.shooting_enemies > 0 and love.math.random() < 0.005 then
         local alive_shooters = {}
         for _, enemy in ipairs(self.shooting_enemies) do
@@ -168,48 +194,44 @@ function GameState:update(dt)
         end
     end
 
+end
+
+function GameState:check_enemy_bullets(dt)
     for i, bullet in ipairs(self.enemy_bullets) do
         bullet:update(dt)
         if bullet.is_dead then
             table.remove(self.enemy_bullets, i)
         end
+
         local hit = bullet:checkCollision(self.player)
         if hit then
-            self.player:checkCollision(bullet)
+            self.player.lives = self.player.lives - 1
+            if self.player.lives == 0 then
+                self.player.is_dead = true
+            end
             table.remove(self.enemy_bullets, i)
         end
     end
+end
 
+function GameState:should_ufo()
+    if #self.ufos == 0 and love.math.random() < self.ufo_chance then
+        local direction = love.math.random(0, 1)
+        if direction == 0 then
+            direction = -1
+        end
+        local ufo = UFO(direction)
+        table.insert(self.ufos, ufo)
+    end
+end
+
+function GameState:check_ufo()
     for i, ufo in ipairs(self.ufos) do
         if ufo.is_dead then
             ufo.sound:stop()
             table.remove(self.ufos, i)
         end
     end
-
-    if self.player.is_dead then 
-        self.state = 'gameover'
-    end
-
-end
-
-function GameState:check_state()
-    if all_dead(self.enemies) then
-        self.state = 'win'
-    end
-
-    if self.state == 'gameover' and not self.state_change_triggered then
-        self.state_change_triggered = true
-        self:cleanup()
-        self.callbacks.on_game_over()
-        return
-    elseif self.state == 'win' and not self.state_change_triggered then
-        self.state_change_triggered = true
-        self:cleanup()
-        self.callbacks.on_win()
-        return
-    end
-    collectgarbage("collect")
 end
 
 function GameState:cleanup()
