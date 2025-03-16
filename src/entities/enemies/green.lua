@@ -1,4 +1,4 @@
-local Invader = require("src.entities.invader")
+local Invader = require("src.entities.enemies.invader")
 local Green = Invader:extend()
 
 function Green:new(x, y)

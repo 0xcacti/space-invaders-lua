@@ -1,5 +1,6 @@
-local Invader = require("src.entities.invader")
+local Invader = require("src.entities.enemies.invader")
 local Yellow = Invader:extend()
+
 local PlungerBullet = require("src.entities.bullets.plunger")
 local SquigglyBullet = require("src.entities.bullets.squiggly")
 local ZigZagBullet = require("src.entities.bullets.zigzag")

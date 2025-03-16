@@ -1,6 +1,5 @@
-local Invader = require("src.entities.invader")
+local Invader = require("src.entities.enemies.invader")
 local Red = Invader:extend()
-
 
 function Red:new(x, y)
     Red.super.new(self, x, y)
