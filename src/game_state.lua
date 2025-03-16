@@ -110,7 +110,7 @@ function GameState:update(dt)
     self.move_timer = self.move_timer + dt
     if self.move_timer >= self.move_interval then
         self.move_timer = 0
-        self:move_enemies()
+        self:move_enemies(dt)
     end
 
     self:check_player_bullets(dt)
@@ -244,7 +244,7 @@ function GameState:cleanup()
     self.enemy_bullets = {}
 end
 
-function GameState:move_enemies()
+function GameState:move_enemies(dt)
     local should_move_down = false
 
     for _, enemy in ipairs(self.enemies) do
