@@ -1,16 +1,19 @@
-local Object = require("lib.classic")
+local Invader = require("src.entities.invader")
+local Yellow = Invader:extend()
 local PlungerBullet = require("src.entities.bullets.plunger")
 local SquigglyBullet = require("src.entities.bullets.squiggly")
 local ZigZagBullet = require("src.entities.bullets.zigzag")
-local Yellow = Object:extend()
 
 function Yellow:new(x, y)
-    Yellow.super.new(self)
-    self.image = love.graphics.newImage("assets/sprites/yellowquad.png")
-    self.image:setFilter("nearest", "nearest")
-    self.frames = {}
+    Yellow.super.new(self, x, y)
 
-    -- logical size
+    -- images
+    self.image = love.graphics.newImage("assets/sprites/yellowquad.png")
+    self.death_image = love.graphics.newImage("assets/sprites/enemy-death.png")
+    self.image:setFilter("nearest", "nearest")
+
+    -- frames and dimensions
+    self.frames = {}
     self.scale = 4
     self.image_width = 8
     self.image_height = 8
@@ -23,13 +26,7 @@ function Yellow:new(x, y)
         love.graphics.newQuad(self.image_width + 1, 0, self.image_width, self.image_height, self.image:getDimensions()))
 
     --  enemy atributes
-    self.speed = 100
-    self.x = x
-    self.y = y
-    self.score = 10
-    self.current_frame = 1
-    self.is_dead = false
-    self.chance_to_shoot = 0.01
+    self.score = 50
 end
 
 function Yellow:shoot(enemy_bullets)
@@ -41,33 +38,6 @@ function Yellow:shoot(enemy_bullets)
     else
         table.insert(enemy_bullets, ZigZagBullet(self.x, self.y, true))
     end
-end
-
-function Yellow:checkCollision(obj)
-    local self_left = self.x
-    local self_right = self.x + self.width
-    local self_top = self.y
-    local self_bottom = self.y + self.height
-
-    local obj_left = obj.x
-    local obj_right = obj.x + obj.width
-    local obj_top = obj.y
-    local obj_bottom = obj.y + obj.height
-
-    if self_right > obj_left and
-        self_left < obj_right and
-        self_bottom > obj_top and
-        self_top < obj_bottom then
-        self.is_dead = true
-        return true
-    end
-
-    return false
-end
-
-function Yellow:draw()
-    love.graphics.draw(self.image, self.frames[math.floor(self.current_frame)], self.x, self.y, 0, self.scale, self
-        .scale)
 end
 
 return Yellow

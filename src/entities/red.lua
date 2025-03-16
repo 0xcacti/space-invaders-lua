@@ -27,13 +27,4 @@ function Red:new(x, y)
     self.score = 10
 end
 
-function Red:update(dt)
-    if self.is_dead then
-        self.death_timer = self.death_timer + dt
-        if self.death_timer >= self.death_duration then
-            self.remove = true
-        end
-    end
-end
-
 return Red
