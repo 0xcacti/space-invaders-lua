@@ -107,6 +107,15 @@ function GameState:update(dt)
         ufo:update(dt)
     end
 
+    for _, enemy in ipairs(self.enemies) do
+        if enemy.is_dead then
+            enemy.death_timer = enemy.death_timer + dt
+            if enemy.death_timer >= enemy.death_duration then
+                enemy.remove = true
+            end
+        end
+    end
+
     self.move_timer = self.move_timer + dt
     if self.move_timer >= self.move_interval then
         self.move_timer = 0

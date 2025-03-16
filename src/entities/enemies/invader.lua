@@ -8,11 +8,11 @@ function Invader:new(x, y)
     self.current_frame = 1
     self.is_dead = false
     self.death_timer = 0
-    self.death_duration = 0.5
+    self.death_duration = 0.3
     self.remove = false
 end
 
-function Invader:update(dt)
+function Invader:mark_dead(dt)
     if self.is_dead then
         self.death_timer = self.death_timer + dt
         if self.death_timer >= self.death_duration then
