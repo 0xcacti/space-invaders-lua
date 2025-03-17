@@ -4,10 +4,13 @@ local GameState = require("src.game_state")
 
 local levels = {
     {
+        min_y = 110,
         start_y = 110,
         ufo_chance = 0.1
+
     },
     {
+        min_y = 110,
         start_y = 140,
         ufo_chance = 0.1
     },

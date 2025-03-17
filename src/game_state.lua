@@ -89,7 +89,7 @@ function GameState:new(level, score, callbacks)
 
     -- move rates
     self.move_timer = 0
-    self.move_interval = 0.2
+    self.move_interval = 0.5
     self.move_direction = 1
     self.move_step = width / 5
 
@@ -115,6 +115,8 @@ function GameState:update(dt)
             end
         end
     end
+
+    self:update_enemy_speed()
 
     self.move_timer = self.move_timer + dt
     if self.move_timer >= self.move_interval then
@@ -251,6 +253,11 @@ function GameState:cleanup()
     self.ufos = {}
     self.player_bullets = {}
     self.enemy_bullets = {}
+end
+
+function GameState:update_enemy_speed()
+    local lowest_y = 0
+    local enemy_count = 0
 end
 
 function GameState:move_enemies(dt)
