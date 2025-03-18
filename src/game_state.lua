@@ -7,6 +7,7 @@ local Yellow = require("src.entities.enemies.yellow")
 local UFO = require("src.entities.enemies.ufo")
 local ScoreBoard = require("src.ui.score_board")
 local Ground = require("src.ui.ground")
+local Barrier = require("src.barrier")
 require("src.utils")
 
 function GameState:new(level, score, callbacks)
@@ -96,6 +97,8 @@ function GameState:new(level, score, callbacks)
     -- enemy fire rates
     self.player_bullets = {}
     self.enemy_bullets = {}
+
+    self.barrier_one = Barrier(100, 100)
 end
 
 function GameState:update(dt)
@@ -320,6 +323,7 @@ function GameState:draw()
             bullet:draw()
         end
     end
+    self.barrier_one:draw()
 end
 
 return GameState

@@ -8,7 +8,7 @@ function Invader:new(x, y)
     self.current_frame = 1
     self.is_dead = false
     self.death_timer = 0
-    self.death_duration = 0.3
+    self.death_duration = 0.5
     self.remove = false
 end
 
