@@ -98,7 +98,12 @@ function GameState:new(level, score, callbacks)
     self.player_bullets = {}
     self.enemy_bullets = {}
 
-    self.barrier_one = Barrier(100, 100)
+    -- barriers
+    self.barriers = {}
+    table.insert(self.barriers, Barrier(100, 500))
+    table.insert(self.barriers, Barrier(300, 500))
+    table.insert(self.barriers, Barrier(500, 500))
+    table.insert(self.barriers, Barrier(700, 500))
 end
 
 function GameState:update(dt)
@@ -187,6 +192,13 @@ function GameState:check_player_bullets(dt)
             end
         end
 
+        for _, barrier in ipairs(self.barriers) do
+            if barrier:checkCollision(bullet) then
+                bullet.is_dead = true
+                break
+            end
+        end
+
         if bullet.is_dead then
             table.remove(self.player_bullets, i)
         end
@@ -223,6 +235,14 @@ function GameState:check_enemy_bullets(dt)
                 self.player.is_dead = true
             end
             table.remove(self.enemy_bullets, i)
+            return
+        end
+
+        for _, barrier in ipairs(self.barriers) do
+            if barrier:checkCollision(bullet) then
+                bullet.is_dead = true
+                break
+            end
         end
     end
 end
@@ -323,7 +343,10 @@ function GameState:draw()
             bullet:draw()
         end
     end
-    self.barrier_one:draw()
+
+    for _, barrier in ipairs(self.barriers) do
+        barrier:draw()
+    end
 end
 
 return GameState
