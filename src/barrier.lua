@@ -46,7 +46,12 @@ function Barrier:new(x, y)
     self.bitmap[3][self.width] = 0
     self.bitmap[1][self.width - 2] = 0
 
-
+    self.bitmap[arch_height][arch_start] = 1
+    self.bitmap[arch_height][arch_start+arch_width+1] = 1
+    self.bitmap[arch_height][arch_start+1] = 1
+    self.bitmap[arch_height][arch_start+arch_width] = 1
+    self.bitmap[arch_height+1][arch_start] = 1
+    self.bitmap[arch_height+1][arch_start+arch_width+1] = 1
 
 
 end
@@ -71,25 +76,3 @@ end
 
 
 return Barrier
-
-
---[[ 
-
-0001111111111111111111111000
-0011111111111111111111111100
-0111111111111111111111111110
-1111111111111111111111111111
-1111111111111111111111111111
-1111111111110001111111111111
-1111111111100000111111111111
-1111111111000000011111111111
-1111111110000000001111111111
-1111111100000000000111111111
-1111111100000000000111111111
-1111111100000000000111111111
-1111111100000000000111111111
-1111111100000000000111111111
-
-
-
-]]--
