@@ -313,10 +313,9 @@ function GameState:move_enemies(dt)
         end
     end
 
-    if should_move_down then 
+    if should_move_down then
         self.move_interval = self.move_interval * (1 - self.speed_increase_per_drop)
     end
-
 end
 
 function GameState:keypressed(key)

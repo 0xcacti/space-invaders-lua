@@ -28,7 +28,7 @@ cool stuff with it to build a game outside of the context of neovim.
     - [x] Squiggly
     - [x] Plunger
 
-- [ ] Create enemies
+- [x] Create enemies
     - [x] Add enemy death animation
     - [x] Create octopus enemy
         - [x] Customize to have correct behavior
@@ -37,17 +37,23 @@ cool stuff with it to build a game outside of the context of neovim.
     - [x] Create squid enemy
         - [x] Customize to have correct behavior
     - [x] Implement correct shooting behavior
-    - [ ] Implement correct movement behavior 
-    - [ ] Create the UFO 
+    - [x] Implement correct movement behavior 
+    - [x] Create the UFO 
 
-- [ ] Create the game loop
+- [x] Create the game loop
     - [x] create grid of enemies
-    - [ ] Add enemy movement with increasing speed 
-    - [ ] Add rounds and ultimate end state 
+    - [x] Add enemy movement with increasing speed 
+    - [x] Add rounds and ultimate end state 
 
 - [ ] Add supplementals
     - [ ] Add game over screen 
     - [ ] Add start screen
     - [ ] Add save files
+
+- [ ] Add music and sounds 
+- [ ] Add player death animation 
+- [ ] Add persistent barriers between levels 
+- [ ] Fix barrier spacing 
+- [ ] make player persistent across levels 
 
 

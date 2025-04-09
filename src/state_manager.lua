@@ -6,32 +6,32 @@ local levels = {
     {
         start_y = 110,
         move_interval = 0.5,
-        ufo_chance = 0.000001
+        ufo_chance = 0.0001
     },
     {
         start_y = 120,
         move_interval = 0.45,
-        ufo_chance = 0.000001
+        ufo_chance = 0.0001
     },
     {
         start_y = 130,
         move_interval = 0.40,
-        ufo_chance = 0.000001
+        ufo_chance = 0.0001
     },
     {
         start_y = 140,
         move_interval = 0.35,
-        ufo_chance = 0.000001
+        ufo_chance = 0.0001
     },
     {
         start_y = 150,
         move_interval = 0.30,
-        ufo_chance = 0.000001
+        ufo_chance = 0.0001
     },
     {
         start_y = 160,
         move_interval = 0.25,
-        ufo_chance = 0.000001
+        ufo_chance = 0.0001
     },
 }
 
