@@ -90,13 +90,12 @@ function GameState:new(level, score, callbacks)
 
     -- move rates
     self.move_timer = 0
-    self.move_interval = level.move_interval
+    self.base_move_interval = level.move_interval
+    self.move_interval = self.base_move_interval
     self.move_direction = 1
     self.move_step = width / 5
-
-
-
-    -- speed
+    self.y_move_step = height / 3
+    self.speed_increase_per_drop = 0.05
 
     -- enemy fire rates
     self.player_bullets = {}
@@ -128,7 +127,6 @@ function GameState:update(dt)
         end
     end
 
-    self:update_enemy_speed()
 
     self.move_timer = self.move_timer + dt
     if self.move_timer >= self.move_interval then
@@ -283,11 +281,6 @@ function GameState:cleanup()
     self.enemy_bullets = {}
 end
 
-function GameState:update_enemy_speed()
-    local lowest_y = 0
-    local enemy_count = 0
-end
-
 function GameState:move_enemies(dt)
     local should_move_down = false
 
@@ -305,7 +298,7 @@ function GameState:move_enemies(dt)
     for _, enemy in ipairs(self.enemies) do
         if not enemy.is_dead then
             if should_move_down then
-                enemy.y = enemy.y + enemy.height
+                enemy.y = enemy.y + (enemy.height / 3)
             else
                 enemy.x = enemy.x + self.move_step * self.move_direction
             end
@@ -319,6 +312,11 @@ function GameState:move_enemies(dt)
             end
         end
     end
+
+    if should_move_down then 
+        self.move_interval = self.move_interval * (1 - self.speed_increase_per_drop)
+    end
+
 end
 
 function GameState:keypressed(key)
