@@ -90,9 +90,13 @@ function GameState:new(level, score, callbacks)
 
     -- move rates
     self.move_timer = 0
-    self.move_interval = 0.5
+    self.move_interval = level.move_interval
     self.move_direction = 1
     self.move_step = width / 5
+
+
+
+    -- speed
 
     -- enemy fire rates
     self.player_bullets = {}
@@ -165,6 +169,7 @@ function GameState:check_player_bullets(dt)
     for i, bullet in ipairs(self.player_bullets) do
         bullet:update(dt)
         for _, enemy in ipairs(self.enemies) do
+            print(enemy.height)
             if not enemy.is_dead and enemy:checkCollision(bullet) then
                 self.score_board.score = self.score_board.score + enemy.score
                 self.callbacks.on_score(enemy.score)

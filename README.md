@@ -10,11 +10,11 @@ cool stuff with it to build a game outside of the context of neovim.
 ## TODO 
 
 - [ ] UI 
-    - [ ] show score
+    - [x] show score
         - [x] Make scoreboard
-        - [ ] Make scoreboard less ugly
+        - [x] Make scoreboard less ugly
     - [ ] Show lives
-    - [ ] add bottom line 
+    - [x] add bottom line 
 
 - [ ] Create a player 
     - [x] Add ability to shoot
@@ -29,19 +29,19 @@ cool stuff with it to build a game outside of the context of neovim.
     - [x] Plunger
 
 - [ ] Create enemies
-    - [ ] Add enemy death animation
+    - [x] Add enemy death animation
     - [x] Create octopus enemy
         - [x] Customize to have correct behavior
     - [x] Create crab enemy
         - [x] Customize to have correct behavior
-    - [ ] Create squid enemy
+    - [x] Create squid enemy
         - [x] Customize to have correct behavior
-    - [ ] Implement correct shooting behavior
-    - [ ] Implement correct movement behavior
+    - [x] Implement correct shooting behavior
+    - [ ] Implement correct movement behavior 
     - [ ] Create the UFO 
 
 - [ ] Create the game loop
-    - [ ] create grid of enemies
+    - [x] create grid of enemies
     - [ ] Add enemy movement with increasing speed 
     - [ ] Add rounds and ultimate end state 
 
