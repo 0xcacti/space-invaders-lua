@@ -13,7 +13,7 @@ cool stuff with it to build a game outside of the context of neovim.
     - [x] show score
         - [x] Make scoreboard
         - [x] Make scoreboard less ugly
-    - [ ] Show lives
+    - [ ] Show lives (todo)
     - [x] add bottom line 
 
 - [ ] Create a player 
