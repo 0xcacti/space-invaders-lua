@@ -9,7 +9,7 @@ cool stuff with it to build a game outside of the context of neovim.
 
 ## TODO 
 
-- [ ] UI 
+- [x] UI 
     - [x] show score
         - [x] Make scoreboard
         - [x] Make scoreboard less ugly
@@ -49,11 +49,6 @@ cool stuff with it to build a game outside of the context of neovim.
     - [ ] Add game over screen 
     - [ ] Add start screen
     - [ ] Add save files
-
-- [ ] Add music and sounds 
-- [ ] Add player death animation 
-- [ ] Add persistent barriers between levels 
-- [ ] Fix barrier spacing 
-- [ ] make player persistent across levels 
+    - [ ] Add music and sounds 
 
 
