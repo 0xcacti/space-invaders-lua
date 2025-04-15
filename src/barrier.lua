@@ -21,8 +21,6 @@ function Barrier:new(x, y)
     end
 
     local arch_width = 8
-    local arch_start_width = 3
-    local arch_end_width = 11
     local arch_height = 8
     local arch_start = math.floor((self.width - arch_width) / 2)
 
@@ -57,12 +55,12 @@ function Barrier:new(x, y)
     self.quadrantWidth = math.floor(self.width / 2)
     self.quadrantHeight = math.floor(self.height / 2)
     self.quadrants = {
-        {active = true, hits = 0}, 
-        {active = true, hits = 0}, 
-        {active = true, hits = 0}, 
-        {active = true, hits = 0}  
+        { active = true, hits = 0 },
+        { active = true, hits = 0 },
+        { active = true, hits = 0 },
+        { active = true, hits = 0 }
     }
-    self.maxHitsPerQuadrant = 5 
+    self.maxHitsPerQuadrant = 5
     self.activeQuadrants = 4
 end
 
@@ -70,8 +68,8 @@ function Barrier:checkCollision(bullet)
     local bulletX = math.floor((bullet.x - self.x) / self.pixelSize) + 1
     local bulletY = math.floor((bullet.y - self.y) / self.pixelSize) + 1
 
-    if bulletX >= 1 and bulletX <= self.width and 
-       bulletY >= 1 and bulletY <= self.height then
+    if bulletX >= 1 and bulletX <= self.width and
+        bulletY >= 1 and bulletY <= self.height then
         if self.bitmap[bulletY][bulletX] == 1 then
             self:damage(bulletX, bulletY)
             return true
@@ -84,17 +82,17 @@ function Barrier:damage(x, y)
     local quadX = x > self.quadrantWidth and 2 or 1
     local quadY = y > self.quadrantHeight and 2 or 1
     local quadIndex = (quadY - 1) * 2 + quadX
-    
+
     if not self.quadrants[quadIndex].active then return end
-    
-    local damageRadius = 4 
+
+    local damageRadius = 4
     local pixelsDamaged = 0
     for dy = -damageRadius, damageRadius do
         for dx = -damageRadius, damageRadius do
             local newY = y + dy
             local newX = x + dx
-            if newX >= 1 and newX <= self.width and 
-               newY >= 1 and newY <= self.height then
+            if newX >= 1 and newX <= self.width and
+                newY >= 1 and newY <= self.height then
                 if self.bitmap[newY][newX] == 1 and math.random() > 0.5 then
                     self.bitmap[newY][newX] = 0
                     pixelsDamaged = pixelsDamaged + 1
@@ -102,7 +100,7 @@ function Barrier:damage(x, y)
             end
         end
     end
-    
+
     -- Update quadrant damage (count hits based on actual damage)
     if pixelsDamaged > 0 then
         self.quadrants[quadIndex].hits = self.quadrants[quadIndex].hits + 1
@@ -114,15 +112,15 @@ end
 
 function Barrier:destroyQuadrant(index)
     if not self.quadrants[index].active then return end
-    
+
     self.quadrants[index].active = false
     self.activeQuadrants = self.activeQuadrants - 1
-    
+
     local startX = (index % 2 == 0) and self.quadrantWidth + 1 or 1
     local startY = (index > 2) and self.quadrantHeight + 1 or 1
     local endX = startX + self.quadrantWidth - 1
     local endY = startY + self.quadrantHeight - 1
-    
+
     for y = startY, endY do
         for x = startX, endX do
             self.bitmap[y][x] = 0
@@ -136,14 +134,14 @@ end
 
 function Barrier:draw()
     if self.activeQuadrants <= 0 then return end
-    
+
     love.graphics.setColor(0, 1, 0)
     for y = 1, self.height do
         for x = 1, self.width do
             if self.bitmap[y][x] == 1 then
-                love.graphics.rectangle("fill", 
-                    self.x + (x-1) * self.pixelSize, 
-                    self.y + (y-1) * self.pixelSize, 
+                love.graphics.rectangle("fill",
+                    self.x + (x - 1) * self.pixelSize,
+                    self.y + (y - 1) * self.pixelSize,
                     self.pixelSize, self.pixelSize)
             end
         end
@@ -152,5 +150,3 @@ function Barrier:draw()
 end
 
 return Barrier
-
-

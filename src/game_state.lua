@@ -10,7 +10,7 @@ local Ground = require("src.ui.ground")
 local Barrier = require("src.barrier")
 require("src.utils")
 
-function GameState:new(level, score, callbacks)
+function GameState:new(level, score, player, barriers, callbacks)
     assert(level, "GameState requires a non-nil level parameter")
     assert(score, "GameState requires a non-nil score parameter")
     assert(callbacks, "GameState requires a non-nil callbacks parameter")
@@ -18,7 +18,7 @@ function GameState:new(level, score, callbacks)
     self.mode = 'play'
     self.callbacks = callbacks
 
-    self.player = Player()
+    self.player = player or Player()
     self.enemies = {}
     self.shooting_enemies = {}
 
@@ -102,11 +102,7 @@ function GameState:new(level, score, callbacks)
     self.enemy_bullets = {}
 
     -- barriers
-    self.barriers = {}
-    table.insert(self.barriers, Barrier(100, 500))
-    table.insert(self.barriers, Barrier(300, 500))
-    table.insert(self.barriers, Barrier(500, 500))
-    table.insert(self.barriers, Barrier(700, 500))
+    self.barriers = barriers
 end
 
 function GameState:update(dt)
@@ -348,6 +344,16 @@ function GameState:draw()
 
     for _, barrier in ipairs(self.barriers) do
         barrier:draw()
+    end
+
+    local p_width = self.player.width
+    local p_height = self.player.image:getHeight()
+    local gap_right = 10
+    local total_width = (p_width + gap_right) * 3
+    for i=1, self.player.lives do 
+        local x = (self.screen_width - p_width - 2 * gap_right) - (i-1) * (p_width + gap_right)
+        local y = total_height
+        love.graphics.draw(self.player.image, x, p_height)
     end
 end
 
