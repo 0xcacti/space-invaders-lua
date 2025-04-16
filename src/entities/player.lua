@@ -5,6 +5,27 @@ local Player = Object:extend()
 function Player:new()
     Player.super.new(self)
     self.image = love.graphics.newImage("assets/sprites/player.png")
+    self.death_image = love.graphics.newImage("assets/sprites/player-deathquad.png")
+    self.death_frame = {}
+    local death_img_width = self.death_image:getWidth()
+    local death_img_height = self.death_image:getHeight()
+
+    self.death_frame[1] = love.graphics.newQuad(
+        0, 0,                -- X, Y position in the image
+        death_img_width / 2, -- Width of the first quad (half the image width)
+        death_img_height,    -- Full height
+        death_img_width,     -- Full width of source image
+        death_img_height     -- Full height of source image
+    )
+
+    self.death_frame[2] = love.graphics.newQuad(
+        death_img_width / 2, 0, -- X, Y position for second half
+        death_img_width / 2,    -- Width of the second quad (half the image width)
+        death_img_height,       -- Full height
+        death_img_width,        -- Full width of source image
+        death_img_height        -- Full height of source image
+    )
+
     self.shoot_sound = love.audio.newSource("assets/sfx/shoot.wav", "static")
     self.shoot_sound:setVolume(0.1)
     self.shoot_sound:setPitch(1.5)
@@ -45,6 +66,8 @@ end
 
 function Player:draw()
     love.graphics.draw(self.image, self.x, self.y)
+
+    love.graphics.draw(self.death_image, self.death_frame[1], 300, 300)
 end
 
 return Player
