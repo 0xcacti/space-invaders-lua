@@ -20,7 +20,8 @@ cool stuff with it to build a game outside of the context of neovim.
     - [x] Add ability to shoot
     - [x] Center bullet shooting from player 
     - [x] Restrict to one bullet at a time
-    - [ ] Add player death animation 
+    - [x] Add player death animation 
+    - [ ] Paule everything else during death animation
 
 - [x] Create shot patterns 
     - [x] Straight 
@@ -49,6 +50,10 @@ cool stuff with it to build a game outside of the context of neovim.
     - [ ] Add game over screen 
     - [ ] Add start screen
     - [ ] Add save files
+    - [ ] Add high scores
     - [ ] Add music and sounds 
+    - [ ] Configure 
+        - [ ] Proper space ship rate 
+        - [ ] Proper fire rates
 
 
