@@ -135,7 +135,7 @@ function GameState:update(dt)
     self:check_enemy_bullets(dt)
     self:check_ufo()
 
-    if self.player.is_dead then
+    if self.player.is_dead and self.player.remove then
         self.state = 'gameover'
     end
 end
@@ -231,7 +231,9 @@ function GameState:check_enemy_bullets(dt)
         if hit then
             self.player.lives = self.player.lives - 1
             if self.player.lives == 0 then
-                self.player.is_dead = true
+                self.player:mark_dead()
+            else
+                self.player:take_hit()
             end
             table.remove(self.enemy_bullets, i)
             return

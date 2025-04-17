@@ -11,12 +11,13 @@ function Player:new()
     self.death_image = love.graphics.newImage("assets/sprites/player-deathquad.png")
     self.death_image:setFilter("nearest", "nearest") -- Add this line
 
-    self.death_frame = {}
+    self.cur_death_frame = 0
+    self.death_frames = {}
     local death_img_width = self.death_image:getWidth()
     local death_img_height = self.death_image:getHeight()
 
 
-    self.death_frame[1] = love.graphics.newQuad(
+    self.death_frames[1] = love.graphics.newQuad(
         0, 0,
         death_img_width / 2,
         death_img_height,
@@ -24,7 +25,7 @@ function Player:new()
         death_img_height
     )
 
-    self.death_frame[2] = love.graphics.newQuad(
+    self.death_frames[2] = love.graphics.newQuad(
         death_img_width / 2, 0,
         death_img_width / 2,
         death_img_height,
@@ -44,12 +45,36 @@ function Player:new()
     self.y = 600
     self.lives = 3
     self.is_dead = false
+
+    self.is_hit = false
+    self.hit_timer = 0
+    self.hit_duration = 0.5
+    self.hit_flash_rate = 8
+
+    self.remove = false
+    self.death_timer = 0
+    self.death_duration = 0.5
     self.shot_count = 0
 end
 
 function Player:update(dt)
-    local window_width = love.graphics.getWidth()
+    if self.is_dead then
+        self.death_timer = self.death_timer + dt
+        if self.death_timer >= self.death_duration then
+            self.remove = true
+        end
+        return 
+    end
 
+    if self.is_hit then 
+        self.hit_timer = self.hit_timer + dt 
+        if self.hit_timer >= self.hit_duration then
+            self.is_hit = false
+            self.hit_timer = 0
+        end
+    end
+
+    local window_width = love.graphics.getWidth()
     if love.keyboard.isDown("left") then
         self.x = self.x - self.speed * dt
     elseif love.keyboard.isDown("right") then
@@ -71,18 +96,44 @@ function Player:keyPressed(key, list_of_bullets)
     end
 end
 
-function Player:draw()
-    love.graphics.draw(self.image, self.x, self.y)
+function Player:take_hit() 
+    self.is_hit = true
+    self.hit_timer = 0
+end
 
-    love.graphics.draw(
-        self.death_image,
-        self.death_frame[2],
-        self.x + 100,
-        self.y,
-        0, -- rotation
-        self.death_scale_x,
-        self.death_scale_y
-    )
+function Player:mark_dead(dt)
+    self.is_dead = true
+    self.death_timer = 0
+end
+
+function Player:draw()
+    if self.is_dead then
+        if not self.remove then 
+            local frame_index = math.floor(self.death_timer * self.hit_flash_rate) % 2 + 1
+            love.graphics.draw(
+                self.death_image,
+                self.death_frames[frame_index],
+                self.x, -- Remove the +100 here
+                self.y,
+                0, -- rotation
+                self.death_scale_x,
+                self.death_scale_y
+            )
+        end
+    elseif self.is_hit then 
+        local frame_index = math.floor(self.hit_timer * self.hit_flash_rate) % 2 + 1
+        love.graphics.draw(
+            self.death_image,
+            self.death_frames[frame_index],
+            self.x, -- Remove the +100 here
+            self.y,
+            0, -- rotation
+            self.death_scale_x,
+            self.death_scale_y
+        )
+    else
+        love.graphics.draw(self.image, self.x, self.y)
+    end
 end
 
 return Player
