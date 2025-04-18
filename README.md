@@ -16,12 +16,12 @@ cool stuff with it to build a game outside of the context of neovim.
     - [x] Show lives 
     - [x] add bottom line 
 
-- [ ] Create a player 
+- [x] Create a player 
     - [x] Add ability to shoot
     - [x] Center bullet shooting from player 
     - [x] Restrict to one bullet at a time
     - [x] Add player death animation 
-    - [ ] Paule everything else during death animation
+    - [x] Pause everything else during death animation
 
 - [x] Create shot patterns 
     - [x] Straight 
@@ -47,10 +47,13 @@ cool stuff with it to build a game outside of the context of neovim.
     - [x] Add rounds and ultimate end state 
 
 - [ ] Add supplementals
-    - [ ] Add game over screen 
-    - [ ] Add start screen
-    - [ ] Add save files
-    - [ ] Add high scores
+    - [ ] Properly manage game state
+        - [ ] Correctly transition between states
+        - [ ] Add start screen
+        - [ ] Add game over state 
+        - [ ] Add game paused state
+        - [ ] Add save files
+        - [ ] Add high scores
     - [ ] Add music and sounds 
     - [ ] Configure 
         - [ ] Proper space ship rate 
