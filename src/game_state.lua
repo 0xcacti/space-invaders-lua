@@ -107,7 +107,12 @@ end
 
 function GameState:update(dt)
     self:check_state()
+    if (self.player.is_dead  and self.player.death_timer < self.player.death_duration) or self.player.is_hit then
+        self.player:update(dt)
+        return 
+    end
     self.player:update(dt)
+
 
     self:should_ufo()
     for _, ufo in ipairs(self.ufos) do
@@ -351,10 +356,8 @@ function GameState:draw()
     local p_width = self.player.width
     local p_height = self.player.image:getHeight()
     local gap_right = 10
-    local total_width = (p_width + gap_right) * 3
     for i = 1, self.player.lives do
         local x = (self.screen_width - p_width - 2 * gap_right) - (i - 1) * (p_width + gap_right)
-        local y = total_height
         love.graphics.draw(self.player.image, x, p_height)
     end
 end
