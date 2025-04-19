@@ -63,11 +63,11 @@ function Player:update(dt)
         if self.death_timer >= self.death_duration then
             self.remove = true
         end
-        return 
+        return
     end
 
-    if self.is_hit then 
-        self.hit_timer = self.hit_timer + dt 
+    if self.is_hit then
+        self.hit_timer = self.hit_timer + dt
         if self.hit_timer >= self.hit_duration then
             self.is_hit = false
             self.hit_timer = 0
@@ -75,10 +75,12 @@ function Player:update(dt)
     end
 
     local window_width = love.graphics.getWidth()
-    if love.keyboard.isDown("left") then
-        self.x = self.x - self.speed * dt
-    elseif love.keyboard.isDown("right") then
-        self.x = self.x + self.speed * dt
+    if not self.is_dead and not self.is_hit then
+        if love.keyboard.isDown("left") then
+            self.x = self.x - self.speed * dt
+        elseif love.keyboard.isDown("right") then
+            self.x = self.x + self.speed * dt
+        end
     end
 
     if self.x < 0 then
@@ -96,7 +98,7 @@ function Player:keyPressed(key, list_of_bullets)
     end
 end
 
-function Player:take_hit() 
+function Player:take_hit()
     self.is_hit = true
     self.hit_timer = 0
 end
@@ -108,26 +110,26 @@ end
 
 function Player:draw()
     if self.is_dead then
-        if not self.remove then 
+        if not self.remove then
             local frame_index = math.floor(self.death_timer * self.hit_flash_rate) % 2 + 1
             love.graphics.draw(
                 self.death_image,
                 self.death_frames[frame_index],
                 self.x, -- Remove the +100 here
                 self.y,
-                0, -- rotation
+                0,      -- rotation
                 self.death_scale_x,
                 self.death_scale_y
             )
         end
-    elseif self.is_hit then 
+    elseif self.is_hit then
         local frame_index = math.floor(self.hit_timer * self.hit_flash_rate) % 2 + 1
         love.graphics.draw(
             self.death_image,
             self.death_frames[frame_index],
             self.x, -- Remove the +100 here
             self.y,
-            0, -- rotation
+            0,      -- rotation
             self.death_scale_x,
             self.death_scale_y
         )

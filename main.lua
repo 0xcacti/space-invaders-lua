@@ -6,37 +6,13 @@ function love.load()
 end
 
 function love.update(dt)
-    if state_manager.state.mode == "paused" then
-        return
-    end
-
-    local res, score = state_manager.state:update(dt)
-
-    if res then
-        if res == "gameover" then
-            current_level = 1
-        elseif res == "win" then
-            state_manager.level_idx = state_manager.level_idx + 1
-            state_manager:load_game_state(state_manager.level_idx, score)
-        end
-    end
+    state_manager:update(dt)
 end
 
 function love.keypressed(key)
-    if key == "p" then
-        if state_manager.state.mode == "paused" then
-            state_manager.state.mode = "play"
-        else
-            state_manager.state.mode = "paused"
-        end
-    end
-    if state_manager.state.mode == "paused" then
-        return
-    end
-
-    state_manager.state:keypressed(key)
+    state_manager:keypressed(key)
 end
 
 function love.draw()
-    state_manager.state:draw()
+    state_manager:draw()
 end

@@ -282,6 +282,7 @@ function GameState:cleanup()
     self.ufos = {}
     self.player_bullets = {}
     self.enemy_bullets = {}
+    self.barriers = {}
 end
 
 function GameState:move_enemies(dt)
