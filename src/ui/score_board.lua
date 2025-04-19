@@ -7,12 +7,10 @@ function ScoreBoard:new(x, y, score)
     self.max_score = 999999
     self.x = x
     self.y = y
-    local text_font = love.graphics.newFont("assets/font/text.ttf", 32)
-    local number_font = love.graphics.newFont("assets/font/numbers.ttf", 64)
-    self.text_font = text_font
-    self.number_font = number_font
-    self.width = text_font:getWidth("Score: ") + number_font:getWidth("999999")
-    self.text_height = text_font:getHeight("Score: ")
+    self.text_font = love.graphics.newFont("assets/font/text.ttf", 32)
+    self.number_font = love.graphics.newFont("assets/font/numbers.ttf", 64)
+    self.width = self.text_font:getWidth("Score: ") + self.number_font:getWidth("999999")
+    self.text_height = self.text_font:getHeight()
 end
 
 function ScoreBoard:draw()
@@ -20,7 +18,8 @@ function ScoreBoard:draw()
     love.graphics.print("Score: ", self.x, self.y)
     love.graphics.setFont(self.number_font)
 
-    love.graphics.print(string.format("%06d", self.score), self.x + self.text_font:getWidth("Score: "), self.y - self.text_height / 2)
+    love.graphics.print(string.format("%06d", self.score), self.x + self.text_font:getWidth("Score: "),
+        self.y - self.text_height / 2)
 end
 
 return ScoreBoard
