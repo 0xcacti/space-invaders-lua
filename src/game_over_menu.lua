@@ -3,7 +3,10 @@ local GameOverMenu = Object:extend()
 
 function GameOverMenu:new(score, on_game_end)
     self.top_scores = {}
-
+    self.filename = "highscores.txt"
+    if not love.filesystem.getInfo(self.filename) then
+        love.filesystem.write(self.filename, "")
+    end
     self.on_game_end = on_game_end
     self.large_text_font = love.graphics.newFont("assets/font/text.ttf", 64)
     self.text_font = love.graphics.newFont("assets/font/text.ttf", 32)
@@ -14,12 +17,14 @@ end
 
 function GameOverMenu:load()
     self.top_scores = {}
-    if love.filesystem.getInfo("highscores.txt") then 
-        local file = love.filesystem.read(string, filename)
-        top_scores = file
+
+    if love.filesystem.getInfo(self.filename) then
+        local file = love.filesystem.read("string", self.filename)
+        for line in file:gmatch("([^\n\r]*)[\n\r]*") do
+            self.top_scores[#self.top_scores + 1] = tonumber(line)
+        end
     end
 end
-
 
 function GameOverMenu:draw()
     love.graphics.clear(0, 0, 0)
