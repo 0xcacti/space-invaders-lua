@@ -48,12 +48,13 @@ cool stuff with it to build a game outside of the context of neovim.
 
 - [ ] Add supplementals
     - [ ] Properly manage game state
-        - [ ] Correctly transition between states
-        - [ ] Add start screen
-        - [ ] Add game over state 
+        - [x] Correctly transition between states
+        - [x] Add start screen
+        - [x] Add game over state 
         - [ ] Add game paused state
-        - [ ] Add save files
-        - [ ] Add high scores
+        - [x] Add save files
+        - [x] Add high scores
+        - [ ] make game over look nice
     - [ ] Add music and sounds 
     - [ ] Configure 
         - [ ] Proper space ship rate 
