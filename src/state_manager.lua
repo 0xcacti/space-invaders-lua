@@ -70,10 +70,11 @@ end
 
 function StateManager:on_game_over()
     self.level_idx = 1
+    local last_score = self.score
     self.score = 0
     self.player = Player()
     self:create_barriers()
-    self.current_screen = GameOverMenu(function() self:on_start() end)
+    self.current_screen = GameOverMenu(last_score, function() self:on_start() end)
 end
 
 function StateManager:create_barriers()

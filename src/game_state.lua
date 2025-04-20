@@ -107,9 +107,9 @@ end
 
 function GameState:update(dt)
     self:check_state()
-    if (self.player.is_dead  and self.player.death_timer < self.player.death_duration) or self.player.is_hit then
+    if (self.player.is_dead and self.player.death_timer < self.player.death_duration) or self.player.is_hit then
         self.player:update(dt)
-        return 
+        return
     end
     self.player:update(dt)
 
@@ -210,7 +210,8 @@ function GameState:check_player_bullets(dt)
 end
 
 function GameState:enemy_fire()
-    if #self.enemy_bullets < 3 and #self.shooting_enemies > 0 and love.math.random() < 0.005 then
+    -- MOOSE
+    if #self.enemy_bullets < 30 and #self.shooting_enemies > 0 and love.math.random() < 0.05 then
         local alive_shooters = {}
         for _, enemy in ipairs(self.shooting_enemies) do
             if not enemy.is_dead then
