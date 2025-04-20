@@ -1,9 +1,11 @@
 local Object = require("lib.classic")
 local StateManager = Object:extend()
 local StartMenu = require("src.start_menu")
+local GameOverMenu = require("src.game_over_menu")
 local GameState = require("src.game_state")
 local Barrier = require("src.barrier")
 local Player = require("src.entities.player")
+
 
 local levels = {
     {
@@ -44,7 +46,6 @@ function StateManager:new()
     self.score     = 0
     self.player    = Player()
     self:create_barriers()
-
     self.current_screen = StartMenu(function() self:on_start() end)
 end
 
@@ -63,9 +64,7 @@ function StateManager:on_win()
     if self.level_idx <= #levels then
         self:create_game_state()
     else
-        self.level_idx = 1
-        self.score = 0
-        self:create_game_state()
+        self:on_game_over()
     end
 end
 
@@ -74,7 +73,7 @@ function StateManager:on_game_over()
     self.score = 0
     self.player = Player()
     self:create_barriers()
-    self.current_screen = StartMenu(function() self:on_start() end)
+    self.current_screen = GameOverMenu(function() self:on_start() end)
 end
 
 function StateManager:create_barriers()
