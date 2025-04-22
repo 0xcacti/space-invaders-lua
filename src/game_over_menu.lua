@@ -2,12 +2,11 @@ local Object = require("lib.classic")
 local GameOverMenu = Object:extend()
 
 function GameOverMenu:new(score, on_game_end)
-
     self.score = score
     self.top_scores = {}
     self.top_names = {}
     self.filename = "highscores.txt"
-    self.is_high_score = false 
+    self.is_high_score = false
     self.is_entering_name = false
     self.player_name = ""
     self.new_score_index = nil
@@ -33,17 +32,17 @@ function GameOverMenu:new(score, on_game_end)
             self.is_high_score = true
             self.is_entering_name = true
             self.new_score_index = i
-            
+
             -- Insert the new score and a placeholder name
             table.insert(self.top_scores, i, score)
             table.insert(self.top_names, i, "")
-            
+
             -- Keep only top 10
             if #self.top_scores > 10 then
                 table.remove(self.top_scores, 11)
                 table.remove(self.top_names, 11)
             end
-            
+
             break
         end
     end
@@ -87,7 +86,7 @@ function GameOverMenu:draw()
     love.graphics.setFont(self.text_font)
     love.graphics.printf("Your Score: " .. self.score, 0, your_score_height, self.screen_width, "center")
 
-    if self.is_high_score and not self.is_entering_name then 
+    if self.is_high_score and not self.is_entering_name then
         love.graphics.setColor(1, 1, 0)
         love.graphics.printf("NEW HIGH SCORE!", 0, your_score_height + font_height + gap_y, self.screen_width, "center")
         love.graphics.setColor(0, 1, 0)
@@ -98,28 +97,28 @@ function GameOverMenu:draw()
     love.graphics.printf("Top Scores", 0, top_scores_height, self.screen_width, "center")
 
     local scores_start_y = top_scores_height + self.text_font:getHeight() + gap_y
-    for i = 1, #self.top_scores do 
+    for i = 1, #self.top_scores do
         local y_pos = scores_start_y + (i - 1) * (font_height + gap_y)
-        if i == self.new_score_index then 
-            love.graphics.setColor(1, 1, 0) 
-        else 
+        if i == self.new_score_index then
+            love.graphics.setColor(1, 1, 0)
+        else
             love.graphics.setColor(0, 1, 0)
         end
 
-        if self.is_entering_name then 
+        if self.is_entering_name then
             love.graphics.setColor(1, 1, 1)
-            love.graphics.printf("Enter your name and press Enter", 0, self.screen_height - 100, self.screen_width, "center")
-        else 
+            love.graphics.printf("Enter your name and press Enter", 0, self.screen_height - 100, self.screen_width,
+                "center")
+        else
             love.graphics.setColor(1, 1, 1)
-            love.graphics.printf("Press Space or Enter to continue", 0, self.screen_height - 100, self.screen_width, "center")
+            love.graphics.printf("Press Space or Enter to continue", 0, self.screen_height - 100, self.screen_width,
+                "center")
         end
     end
 end
 
 function GameOverMenu:update(dt)
     self.time = self.time + dt
-    
-    -- Handle cursor blinking
     if self.is_entering_name then
         self.blink_timer = self.blink_timer + dt
         if self.blink_timer >= self.blink_rate then

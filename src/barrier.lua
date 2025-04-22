@@ -85,7 +85,7 @@ function Barrier:damage(x, y)
 
     if not self.quadrants[quadIndex].active then return end
 
-    local damageRadius = 4
+    local damageRadius = 3
     local pixelsDamaged = 0
     for dy = -damageRadius, damageRadius do
         for dx = -damageRadius, damageRadius do

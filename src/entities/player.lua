@@ -91,7 +91,7 @@ function Player:update(dt)
 end
 
 function Player:keyPressed(key, list_of_bullets)
-    if key == "space" and #list_of_bullets <= 100 then
+    if key == "space" and #list_of_bullets < 1 then
         self.shoot_sound:play()
         self.shot_count = self.shot_count + 1
         table.insert(list_of_bullets, StraightBullet(self.x + (self.width / 2), self.y, false))
@@ -103,7 +103,7 @@ function Player:take_hit()
     self.hit_timer = 0
 end
 
-function Player:mark_dead(dt)
+function Player:mark_dead()
     self.is_dead = true
     self.death_timer = 0
 end

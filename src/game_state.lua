@@ -7,7 +7,6 @@ local Yellow = require("src.entities.enemies.yellow")
 local UFO = require("src.entities.enemies.ufo")
 local ScoreBoard = require("src.ui.score_board")
 local Ground = require("src.ui.ground")
-local Barrier = require("src.barrier")
 require("src.utils")
 
 function GameState:new(level, score, player, barriers, callbacks)
@@ -15,7 +14,7 @@ function GameState:new(level, score, player, barriers, callbacks)
     assert(score, "GameState requires a non-nil score parameter")
     assert(callbacks, "GameState requires a non-nil callbacks parameter")
 
-    self.mode = 'play'
+    self.is_paused = false
     self.callbacks = callbacks
 
     self.player = player or Player()
@@ -168,7 +167,6 @@ function GameState:check_player_bullets(dt)
     for i, bullet in ipairs(self.player_bullets) do
         bullet:update(dt)
         for _, enemy in ipairs(self.enemies) do
-            print(enemy.height)
             if not enemy.is_dead and enemy:checkCollision(bullet) then
                 self.score_board.score = self.score_board.score + enemy.score
                 self.callbacks.on_score(enemy.score)
@@ -211,7 +209,7 @@ end
 
 function GameState:enemy_fire()
     -- MOOSE
-    if #self.enemy_bullets < 30 and #self.shooting_enemies > 0 and love.math.random() < 0.05 then
+    if #self.enemy_bullets < 3 and #self.shooting_enemies > 0 and love.math.random() < 0.05 then
         local alive_shooters = {}
         for _, enemy in ipairs(self.shooting_enemies) do
             if not enemy.is_dead then
@@ -324,7 +322,11 @@ function GameState:move_enemies(dt)
 end
 
 function GameState:keypressed(key)
-    self.player:keyPressed(key, self.player_bullets)
+    if key == "p" or key == "P" then
+        self.is_paused = not self.is_paused
+    else
+        self.player:keyPressed(key, self.player_bullets)
+    end
 end
 
 function GameState:draw()
