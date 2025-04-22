@@ -6,6 +6,9 @@ that I despise rust, and I don't want to use it for anything.
 I enjoy using Lua for neovim, so I decided that I would do some 
 cool stuff with it to build a game outside of the context of neovim.
 
+okay, now writing this after the fact. Love2D is awesome.  It's so easy 
+to just rip out a game.  Great experience and very fun to build a 2D game. 
+
 
 ## TODO 
 
