@@ -211,7 +211,7 @@ function GameState:check_player_bullets(dt)
 end
 
 function GameState:enemy_fire()
-    if #self.enemy_bullets < 3 and #self.shooting_enemies > 0 and love.math.random() < 0.005 then
+    if #self.enemy_bullets < 300 and #self.shooting_enemies > 0 and love.math.random() < 0.5 then
         local alive_shooters = {}
         for _, enemy in ipairs(self.shooting_enemies) do
             if not enemy.is_dead then
@@ -329,6 +329,10 @@ function GameState:keypressed(key)
     else
         self.player:keyPressed(key, self.player_bullets)
     end
+end
+
+function GameState:textinput(text)
+    _ = text
 end
 
 function GameState:draw()

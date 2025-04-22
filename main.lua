@@ -16,3 +16,7 @@ end
 function love.draw()
     state_manager:draw()
 end
+
+function love.textinput(text)
+    state_manager:textinput(text)
+end

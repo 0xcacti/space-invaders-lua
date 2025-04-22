@@ -6,10 +6,13 @@ function GameOverMenu:new(score, on_game_end)
     self.top_scores = {}
     self.top_names = {}
     self.filename = "highscores.txt"
+
     self.is_high_score = false
+    self.has_saved = false
     self.is_entering_name = false
     self.player_name = ""
     self.new_score_index = nil
+
     self.blink_timer = 0
     self.blink_rate = 0.5
     self.show_cursor = true
@@ -30,7 +33,6 @@ function GameOverMenu:new(score, on_game_end)
         if i > 10 then break end
         if i > #self.top_scores or score > self.top_scores[i] then
             self.is_high_score = true
-            self.is_entering_name = true
             self.new_score_index = i
 
             -- Insert the new score and a placeholder name
@@ -54,6 +56,7 @@ function GameOverMenu:load()
     self.top_scores = {}
     if love.filesystem.getInfo(self.filename) then
         local file_str = love.filesystem.read("string", self.filename)
+        assert(type(file_str) == "string", "file_str must be string")
         for line in file_str:gmatch("([^\n]*)\n?") do
             local name, score = line:match("(.+):(.+)")
             if name and score then
@@ -62,6 +65,7 @@ function GameOverMenu:load()
             end
         end
     end
+    table.sort(self.top_scores, function(a, b) return a > b end)
 end
 
 function GameOverMenu:save()
@@ -86,12 +90,6 @@ function GameOverMenu:draw()
     love.graphics.setFont(self.text_font)
     love.graphics.printf("Your Score: " .. self.score, 0, your_score_height, self.screen_width, "center")
 
-    if self.is_high_score and not self.is_entering_name then
-        love.graphics.setColor(1, 1, 0)
-        love.graphics.printf("NEW HIGH SCORE!", 0, your_score_height + font_height + gap_y, self.screen_width, "center")
-        love.graphics.setColor(0, 1, 0)
-    end
-
     font_height = self.text_font:getHeight()
     local top_scores_height = your_score_height + font_height + gap_y * 3
     love.graphics.printf("Top Scores", 0, top_scores_height, self.screen_width, "center")
@@ -104,17 +102,50 @@ function GameOverMenu:draw()
         else
             love.graphics.setColor(0, 1, 0)
         end
-
-        if self.is_entering_name then
-            love.graphics.setColor(1, 1, 1)
-            love.graphics.printf("Enter your name and press Enter", 0, self.screen_height - 100, self.screen_width,
-                "center")
-        else
-            love.graphics.setColor(1, 1, 1)
-            love.graphics.printf("Press Space or Enter to continue", 0, self.screen_height - 100, self.screen_width,
-                "center")
-        end
+        love.graphics.printf(self.top_names[i] .. ": " .. self.top_scores[i], 0, y_pos, self.screen_width, "center")
     end
+    love.graphics.setColor(1, 1, 1)
+    if not self.has_saved and self.is_high_score and not self.is_entering_name then
+        love.graphics.printf("Press Space to enter your name", 0, self.screen_height - 100, self.screen_width,
+            "center")
+    elseif self.is_entering_name then
+        self:draw_popup()
+    else
+        love.graphics.printf("Press Space or Enter to start a new game", 0, self.screen_height - 100, self.screen_width,
+            "center")
+    end
+end
+
+function GameOverMenu:draw_popup()
+    local width = self.screen_width * 2 / 3
+    local height = self.screen_height * 2 / 3
+    local x = (self.screen_width - width) / 2
+    local y = (self.screen_height - height) / 2
+    local corner_radius = 15
+    love.graphics.setColor(0, 0, 0, 1.0)
+    love.graphics.rectangle("fill", x, y, width, height, corner_radius, corner_radius)
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", x, y, width, height, corner_radius, corner_radius)
+    love.graphics.printf("Enter Name for High Score, Return to save", x, y + 20, width, "center")
+
+    -- draw player name and cursor
+    local name_y = y + height / 2 - self.text_font:getHeight() / 2
+    local name_x = x + width / 2 - self.text_font:getWidth(self.player_name) / 2
+    local name_width = self.text_font:getWidth(self.player_name)
+    local name_height = self.text_font:getHeight()
+    local cursor_x = name_x + self.text_font:getWidth(self.player_name)
+    local cursor_y = name_y 
+    local cursor_width = self.text_font:getWidth("|")
+    local cursor_height = self.text_font:getHeight()
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.printf(self.player_name, name_x, name_y, name_width, "center")
+    if self.show_cursor then
+        love.graphics.rectangle("fill", cursor_x, cursor_y, cursor_width, cursor_height)
+    end
+
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function GameOverMenu:update(dt)
@@ -129,6 +160,17 @@ function GameOverMenu:update(dt)
 end
 
 function GameOverMenu:keypressed(key)
+    if self.is_high_score and not self.has_saved then
+        if key == "space" then
+            self.is_entering_name = true
+        end
+        if key == "return" and #self.player_name > 0 then
+            self.top_names[self.new_score_index] = self.player_name
+            self.is_entering_name = false
+            self.has_saved = true
+            self:save()
+        end
+    end
     if self.is_entering_name then
         if key == "return" and #self.player_name > 0 then
             self.top_names[self.new_score_index] = self.player_name
@@ -136,15 +178,11 @@ function GameOverMenu:keypressed(key)
             self:save()
         elseif key == "backspace" then
             self.player_name = string.sub(self.player_name, 1, -2)
-        elseif key == "escape" then
-            -- Cancel name entry
-            table.remove(self.top_scores, self.new_score_index)
-            table.remove(self.top_names, self.new_score_index)
-            self:load() -- Reload original scores
-            self.is_entering_name = false
         end
-    else
-        if key == "return" or key == "space" then
+        return
+    end
+    if not self.is_entering_name and self.has_saved then
+        if key == "space" or key == "return" then
             self.on_game_end()
         end
     end
@@ -152,7 +190,6 @@ end
 
 function GameOverMenu:textinput(text)
     if self.is_entering_name and #self.player_name < 15 then
-        -- Only allow alphanumeric and some special characters
         if text:match("[%w%s_%-]") then
             self.player_name = self.player_name .. text
         end

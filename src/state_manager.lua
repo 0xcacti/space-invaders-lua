@@ -104,4 +104,8 @@ function StateManager:keypressed(key)
     self.current_screen:keypressed(key)
 end
 
+function StateManager:textinput(text)
+    self.current_screen:textinput(text)
+end
+
 return StateManager

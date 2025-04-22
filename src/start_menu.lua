@@ -41,4 +41,8 @@ function StartMenu:keypressed(key)
     end
 end
 
+function StartMenu:textinput(text)
+    _ = text
+end
+
 return StartMenu
