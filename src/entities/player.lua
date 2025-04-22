@@ -7,6 +7,7 @@ function Player:new()
     self.image = love.graphics.newImage("assets/sprites/player.png")
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
+    self.max_shots = 100
 
     self.death_image = love.graphics.newImage("assets/sprites/player-deathquad.png")
     self.death_image:setFilter("nearest", "nearest") -- Add this line
@@ -91,7 +92,7 @@ function Player:update(dt)
 end
 
 function Player:keyPressed(key, list_of_bullets)
-    if key == "space" and #list_of_bullets < 1 then
+    if key == "space" and #list_of_bullets < self.max_shots then
         self.shoot_sound:play()
         self.shot_count = self.shot_count + 1
         table.insert(list_of_bullets, StraightBullet(self.x + (self.width / 2), self.y, false))

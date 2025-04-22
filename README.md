@@ -54,13 +54,11 @@ to just rip out a game.  Great experience and very fun to build a 2D game.
         - [x] Correctly transition between states
         - [x] Add start screen
         - [x] Add game over state 
-        - [ ] Add game paused state
+        - [x] Add game paused state
         - [x] Add save files
         - [x] Add high scores
+        - [ ] finish scoreboard
         - [ ] make game over look nice
     - [ ] Add music and sounds 
-    - [ ] Configure 
-        - [ ] Proper space ship rate 
-        - [ ] Proper fire rates
 
 

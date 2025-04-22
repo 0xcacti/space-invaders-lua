@@ -62,7 +62,7 @@ end
 function StateManager:on_win()
     self.level_idx = self.level_idx + 1
     if self.level_idx <= #levels then
-        self:create_game_state()
+        self:on_start()
     else
         self:on_game_over()
     end
