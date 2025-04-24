@@ -31,23 +31,23 @@ function GameOverMenu:new(score, on_game_end)
 
     for i = 1, #self.top_scores + 1 do
         if i > 10 then break end
-        if i > #self.top_scores or score > self.top_scores[i] then
-            self.is_high_score = true
-            self.new_score_index = i
+            if i > #self.top_scores or score > self.top_scores[i] then
+                self.is_high_score = true
+                self.new_score_index = i
 
-            -- Insert the new score and a placeholder name
-            table.insert(self.top_scores, i, score)
-            table.insert(self.top_names, i, "")
+                -- Insert the new score and a placeholder name
+                table.insert(self.top_scores, i, score)
+                table.insert(self.top_names, i, "")
 
-            -- Keep only top 10
-            if #self.top_scores > 10 then
-                table.remove(self.top_scores, 11)
-                table.remove(self.top_names, 11)
+                -- Keep only top 10
+                if #self.top_scores > 10 then
+                    table.remove(self.top_scores, 11)
+                    table.remove(self.top_names, 11)
+                end
+
+                break
             end
-
-            break
         end
-    end
 
     self.time = 0
 end
@@ -80,18 +80,18 @@ function GameOverMenu:draw()
     love.graphics.clear(0, 0, 0)
     love.graphics.setColor(0, 1, 0)
     love.graphics.setFont(self.large_text_font)
-    local gave_over_height = self.screen_height / 7
+    local gave_over_height = self.screen_height / 20
     local font_height = self.large_text_font:getHeight()
     local gap_y = 10
 
-    love.graphics.printf("GAME OVER", 0, self.screen_height / 7, self.screen_width, "center")
+    love.graphics.printf("GAME OVER", 0, self.screen_height / 20, self.screen_width, "center")
 
     local your_score_height = gave_over_height + font_height + gap_y
     love.graphics.setFont(self.text_font)
     love.graphics.printf("Your Score: " .. self.score, 0, your_score_height, self.screen_width, "center")
 
     font_height = self.text_font:getHeight()
-    local top_scores_height = your_score_height + font_height + gap_y * 3
+    local top_scores_height = your_score_height + font_height + gap_y * 2
     love.graphics.printf("Top Scores", 0, top_scores_height, self.screen_width, "center")
 
     local scores_start_y = top_scores_height + self.text_font:getHeight() + gap_y
@@ -181,10 +181,8 @@ function GameOverMenu:keypressed(key)
         end
         return
     end
-    if not self.is_entering_name and self.has_saved then
-        if key == "space" or key == "return" then
-            self.on_game_end()
-        end
+    if key == "space" or key == "return" then
+        self.on_game_end()
     end
 end
 

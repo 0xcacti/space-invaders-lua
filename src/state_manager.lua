@@ -41,10 +41,13 @@ local levels = {
 }
 
 function StateManager:new()
-    -- game parameters
+    self:to_start_screen()
+end
+
+function StateManager:to_start_screen()
     self.level_idx = 1
-    self.score     = 0
-    self.player    = Player()
+    self.score = 0
+    self.player = Player()
     self:create_barriers()
     self.current_screen = StartMenu(function() self:on_start() end)
 end
@@ -74,7 +77,7 @@ function StateManager:on_game_over()
     self.score = 0
     self.player = Player()
     self:create_barriers()
-    self.current_screen = GameOverMenu(last_score, function() self:on_start() end)
+    self.current_screen = GameOverMenu(last_score, function() self:to_start_screen() end)
 end
 
 function StateManager:create_barriers()
