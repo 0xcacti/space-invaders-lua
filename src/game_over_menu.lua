@@ -170,19 +170,23 @@ function GameOverMenu:keypressed(key)
             self.has_saved = true
             self:save()
         end
+        return
     end
     if self.is_entering_name then
         if key == "return" and #self.player_name > 0 then
             self.top_names[self.new_score_index] = self.player_name
             self.is_entering_name = false
+            self.has_saved = true
             self:save()
         elseif key == "backspace" then
             self.player_name = string.sub(self.player_name, 1, -2)
         end
         return
     end
-    if key == "space" or key == "return" then
-        self.on_game_end()
+    if not self.is_entering_name then
+        if key == "space" or key == "return" then
+            self.on_game_end()
+        end
     end
 end
 

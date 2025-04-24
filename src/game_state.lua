@@ -211,7 +211,7 @@ function GameState:check_player_bullets(dt)
 end
 
 function GameState:enemy_fire()
-    if #self.enemy_bullets < 300 and #self.shooting_enemies > 0 and love.math.random() < 0.5 then
+    if #self.enemy_bullets < 3000 and #self.shooting_enemies > 0 and love.math.random() < 1 then
         local alive_shooters = {}
         for _, enemy in ipairs(self.shooting_enemies) do
             if not enemy.is_dead then
