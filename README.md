@@ -12,6 +12,13 @@ to just rip out a game.  Great experience and very fun to build a 2D game.
 
 ## TODO 
 
+Below is a general todo list that I used to keep track of what was left.  
+It's somewhat incomplete because I started halfway through the project, 
+and normally I would remove it, but I like it.  I tried to build this game 
+mostly without the help of the internet or AI, so I tried to break everything 
+down into really small steps.  It was fun.
+
+
 - [x] UI 
     - [x] show score
         - [x] Make scoreboard
