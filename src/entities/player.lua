@@ -7,11 +7,13 @@ function Player:new()
     self.image = love.graphics.newImage("assets/sprites/player.png")
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
-    self.max_shots = 100
+    self.max_shots = 1
 
     self.death_image = love.graphics.newImage("assets/sprites/player-deathquad.png")
     self.death_image:setFilter("nearest", "nearest") -- Add this line
 
+    self.death_sound = love.audio.newSource("assets/sfx/playerkilled.wav", "static")
+    self.death_sound:setVolume(0.1)
     self.cur_death_frame = 0
     self.death_frames = {}
     local death_img_width = self.death_image:getWidth()
@@ -101,6 +103,7 @@ end
 
 function Player:take_hit()
     self.is_hit = true
+    self.death_sound:play()
     self.hit_timer = 0
 end
 

@@ -6,6 +6,8 @@ function UFO:new(direction)
     self.image = love.graphics.newImage("assets/sprites/ufo.png")
     self.sound = love.audio.newSource("assets/sfx/ufo_highpitch.wav", "static")
     self.sound:setLooping(true)
+    self.sound:setVolume(0.1)
+
 
     self.image:setFilter("nearest", "nearest")
     self.scale = 4

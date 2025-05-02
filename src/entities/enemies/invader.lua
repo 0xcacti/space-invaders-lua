@@ -5,6 +5,8 @@ function Invader:new(x, y)
     Invader.super.new(self)
     self.x = x
     self.y = y
+    self.death_sound = love.audio.newSource("assets/sfx/invaderkilled.wav", "static")
+    self.death_sound:setVolume(0.1)
     self.current_frame = 1
     self.is_dead = false
     self.death_timer = 0
@@ -36,6 +38,7 @@ function Invader:checkCollision(obj)
         self_left < obj_right and
         self_bottom > obj_top and
         self_top < obj_bottom then
+        self.death_sound:play()
         self.is_dead = true
         return true
     end

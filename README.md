@@ -49,16 +49,16 @@ to just rip out a game.  Great experience and very fun to build a 2D game.
     - [x] Add enemy movement with increasing speed 
     - [x] Add rounds and ultimate end state 
 
-- [ ] Add supplementals
-    - [ ] Properly manage game state
+- [x] Add supplementals
+    - [x] Properly manage game state
         - [x] Correctly transition between states
         - [x] Add start screen
         - [x] Add game over state 
         - [x] Add game paused state
         - [x] Add save files
         - [x] Add high scores
-        - [ ] finish scoreboard
-        - [ ] make game over look nice
-    - [ ] Add music and sounds 
+        - [x] finish scoreboard
+        - [x] make game over look nice
+    - [x] Add music and sounds 
 
 

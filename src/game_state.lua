@@ -20,6 +20,13 @@ function GameState:new(level, score, player, barriers, callbacks)
     self.player = player or Player()
     self.enemies = {}
     self.shooting_enemies = {}
+    self.invader_sound_index = 1
+    self.invader_sounds = {}
+    for i = 1, 4 do
+        self.invader_sounds[i] = love.audio.newSource("assets/sfx/fastinvader" .. i .. ".wav", "static")
+        self.invader_sounds[i]:setVolume(0.1)
+    end
+
 
     -- ufo setup
     self.ufo_chance = level.ufo_chance
@@ -211,7 +218,8 @@ function GameState:check_player_bullets(dt)
 end
 
 function GameState:enemy_fire()
-    if #self.enemy_bullets < 3000 and #self.shooting_enemies > 0 and love.math.random() < 1 then
+    local bullet_cap = math.min(3, #self.shooting_enemies)
+    if #self.enemy_bullets < bullet_cap and #self.shooting_enemies > 0 and love.math.random() < 0.003 then
         local alive_shooters = {}
         for _, enemy in ipairs(self.shooting_enemies) do
             if not enemy.is_dead then
@@ -320,6 +328,11 @@ function GameState:move_enemies(dt)
 
     if should_move_down then
         self.move_interval = self.move_interval * (1 - self.speed_increase_per_drop)
+    end
+
+    if not all_dead(self.enemies) then
+        self.invader_sound_index = (self.invader_sound_index % 4) + 1
+        self.invader_sounds[self.invader_sound_index]:play()
     end
 end
 

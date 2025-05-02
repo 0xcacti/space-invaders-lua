@@ -60,7 +60,7 @@ function Barrier:new(x, y)
         { active = true, hits = 0 },
         { active = true, hits = 0 }
     }
-    self.maxHitsPerQuadrant = 5
+    self.maxHitsPerQuadrant = 7
     self.activeQuadrants = 4
 end
 
@@ -85,7 +85,7 @@ function Barrier:damage(x, y)
 
     if not self.quadrants[quadIndex].active then return end
 
-    local damageRadius = 3
+    local damageRadius = 2
     local pixelsDamaged = 0
     for dy = -damageRadius, damageRadius do
         for dx = -damageRadius, damageRadius do
